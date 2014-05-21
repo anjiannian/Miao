@@ -12,15 +12,15 @@ USER_LEVEL = (
 )
 
 
-class BaseMode(models.Model):
+class BaseModel(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     # 0-false, 1-true, ...
     status = models.CharField(max_length=1)
 
 
-class Volunteers(BaseMode):
-    id = models.CharField(max_lenght=36, primary_key=True)
+class Volunteers(BaseModel):
+    #id = models.AutoField(primary_key=True)
     account = models.CharField(u"用户名", max_length=50, unique=True)
     password = models.CharField(u"用户名", max_length=50)
     name = models.CharField(u"真实名称", max_length=50, null=True)
@@ -33,20 +33,20 @@ class Volunteers(BaseMode):
     level = models.CharField(u"性别", max_length=1, choices=USER_LEVEL)
 
 
-class classes(BaseMode):
-    id = models.CharField(max_lenght=36, primary_key=True)
+class Classes(BaseModel):
+    #id = models.AutoField(primary_key=True)
     class_name = models.CharField(u"班级", max_length=50, null=True)
     grade = models.CharField(u"年级", max_length=50, null=True)
     contact = models.CharField(u"联系人", max_length=50, null=True)
     school_name = models.CharField(u"学校名称", max_length=50, null=True)
 
 
-class Courses(BaseMode):
-    id = models.CharField(max_lenght=36, primary_key=True)
+class Courses(BaseModel):
+    #id = models.AutoField(primary_key=True)
     course_name = models.CharField(u"课程名称", max_length=50, null=True)
 
 
-class ClassBegin(BaseMode):
-    id = models.CharField(max_lenght=36, primary_key=True)
+class ClassBegin(BaseModel):
+    #id = models.AutoField(primary_key=True)
     course_id = models.ForeignKey(Courses)
     course_name = models.CharField(u"课程名称", max_length=50, null=True)

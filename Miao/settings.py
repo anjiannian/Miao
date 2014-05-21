@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'Volunteer',
     'django.contrib.admin',
+    'django.contrib.staticfiles',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,17 +61,18 @@ WSGI_APPLICATION = 'Miao.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'user': 'admin',
-        'password': "admin",
-        'host': 'localhost',
-        'port': 3306
+        'NAME': 'miao',
+        'USER': 'root',
+        'PASSWORD': "123456",
+        'HOST': 'localhost',
+        'PORT': 3306
     }
 }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh_cn'
 
 TIME_ZONE = 'UTC'
 
@@ -83,5 +85,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+#STATIC_ROOT = BASE_DIR + '/static/'
 STATIC_URL = '/static/'
