@@ -1,5 +1,6 @@
 from django.contrib import admin
-from Volunteer import models
+from apps.volunteer import models
+
 
 class DocumentAdmin(admin.ModelAdmin):
     pass
