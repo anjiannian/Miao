@@ -50,9 +50,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'Miao.urls'
+ROOT_URLCONF = 'urls'
 
-WSGI_APPLICATION = 'Miao.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database
@@ -88,3 +88,4 @@ USE_TZ = True
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 #STATIC_ROOT = BASE_DIR + '/static/'
 STATIC_URL = '/static/'
+
