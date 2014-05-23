@@ -89,7 +89,7 @@ class Courses(BaseModel):
 
 class ClassBegin(BaseModel):
     #id = models.AutoField(primary_key=True)
-    
+
     course_id = models.ForeignKey(Courses, related_name="aaa")
     class_id = models.ForeignKey(Classes, related_name="bbb")
     volunteer_id = models.ForeignKey(Volunteers, related_name="ccc")
