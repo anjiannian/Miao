@@ -2,13 +2,13 @@
 from django.db import models
 
 SEX_CHOICE = (
-    ("M", "male"),
-    ("F", "female")
+    ("M", u"男"),
+    ("F", u"女")
 )
 
 USER_LEVEL = (
-    (0, "admin"),
-    (1, "ordinary user")
+    (0, u"管理员"),
+    (1, u"普通用户")
 )
 
 
@@ -16,6 +16,7 @@ STATUS = (
     (0, u"禁用"),
     (1, u"正常"),
 )
+
 
 
 class BaseModel(models.Model):
@@ -71,24 +72,9 @@ class CheckIn(BaseModel):
     def __unicode__(self):
         return unicode(self.volunteer_id)
 
-class Class(BaseModel):
-    #id = models.AutoField(primary_key=True)
-    class_name = models.CharField(u"班级", max_length=50)
-    grade = models.CharField(u"年级", max_length=50)
-    contact = models.CharField(u"联系人", max_length=50, null=True, blank=True)
-    school_name = models.CharField(u"学校名称", max_length=50, null=True, blank=True)
-    student_count = models.IntegerField(u"学生人数")
-
-    class Meta:
-        verbose_name = u"班级"
-        verbose_name_plural = u"班级"
-
-    def __unicode__(self):
-        return self.class_name
-
 
 class School(BaseModel):
-    #id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     school_name = models.CharField(u"学校名称", max_length=50)
     description = models.CharField(u"描述", max_length=50, null=True, blank=True)
     contact = models.CharField(u"联系人", max_length=50, null=True, blank=True)
@@ -96,6 +82,22 @@ class School(BaseModel):
     class Meta:
         verbose_name = u"学校"
         verbose_name_plural = u"学校"
+
+    def __unicode__(self):
+        return self.school_name
+
+
+class Class(BaseModel):
+    #id = models.AutoField(primary_key=True)
+    class_name = models.CharField(u"班级", max_length=50)
+    grade = models.CharField(u"年级", max_length=50)
+    contact = models.CharField(u"联系人", max_length=50, null=True, blank=True)
+    school = models.ForeignKey(School)
+    student_count = models.IntegerField(u"学生人数")
+
+    class Meta:
+        verbose_name = u"班级"
+        verbose_name_plural = u"班级"
 
     def __unicode__(self):
         return self.class_name
@@ -113,19 +115,24 @@ class Course(BaseModel):
         return self.course_name
 
 
-class ClassBegin(BaseModel):
-    #id = models.AutoField(primary_key=True)
+COURSE_STATUS = (
+    (0, u"未开始"),
+    (1, u"未评估"),
+    (2, u"已评估"),
+)
 
+
+class ClassBegin(BaseModel):
     course_id = models.ForeignKey(Course, related_name="aaa")
     class_id = models.ForeignKey(Class, related_name="bbb")
     volunteer_id = models.ForeignKey(Volunteer, related_name="ccc")
-    #course_name = models.CharField(u"课程名称", max_length=50, null=True, blank=True)
+    class_time = models.DateTimeField(u"上课时间", null=True, blank=True)
+    status = models.IntegerField(default="0", choices=COURSE_STATUS)
+    evaluate = models.TextField(u"评价")
 
     class Meta:
-        # multi primary keys
-        unique_together = ("course_id", "class_id", "volunteer_id")
-        verbose_name = u"上课情况"
-        verbose_name_plural = u"上课情况"
+        verbose_name = u"排班表"
+        verbose_name_plural = u"排班表"
 
     def __unicode__(self):
-        return u"上课信息"
+        return u"排班表"
