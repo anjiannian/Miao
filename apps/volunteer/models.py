@@ -122,7 +122,10 @@ COURSE_STATUS = (
 )
 
 
-class ClassBegin(BaseModel):
+class ClassBegin():
+    created_at = models.DateTimeField(u"时间", null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     course_id = models.ForeignKey(Course, related_name="aaa")
     class_id = models.ForeignKey(Class, related_name="bbb")
     volunteer_id = models.ForeignKey(Volunteer, related_name="ccc")
