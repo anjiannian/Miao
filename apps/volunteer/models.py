@@ -1,5 +1,6 @@
 # -*- encoding:utf-8 -*-
 from django.db import models
+from django.contrib.auth.models import User
 
 SEX_CHOICE = (
     ("M", u"男"),
@@ -30,10 +31,11 @@ class BaseModel(models.Model):
         abstract = True
 
 
-class Volunteer(BaseModel):
+class Volunteer(models.Model):
     #id = models.AutoField(primary_key=True)
-    account = models.CharField(u"用户名", max_length=50, unique=True)
-    password = models.CharField(u"密码", max_length=50)
+    user = models.OneToOneField(User)
+    #account = models.CharField(u"用户名", max_length=50, unique=True)
+    #password = models.CharField(u"密码", max_length=50)
     name = models.CharField(u"真实名称", max_length=50, null=True, blank=True)
     nick_name = models.CharField(u"昵称", max_length=50, null=True, blank=True)
     en_name = models.CharField(u"英文名称", max_length=50, null=True, blank=True)
@@ -41,14 +43,14 @@ class Volunteer(BaseModel):
     age = models.IntegerField(u"年龄", null=True, blank=True)
     phone_number = models.CharField(u"联系方式", max_length=50)
 
-    level = models.IntegerField(u"级别",  choices=USER_LEVEL)
+    #level = models.IntegerField(u"级别", default=0, choices=USER_LEVEL, null=True, blank=True)
 
     class Meta:
         verbose_name = u"志愿者"
         verbose_name_plural = u"志愿者"
 
     def __unicode__(self):
-        return self.account
+        return self.name
 
 
 class Group(BaseModel):
@@ -64,6 +66,7 @@ class Group(BaseModel):
 
 class CheckIn(BaseModel):
     volunteer_id = models.ForeignKey(Volunteer, related_name="volunteer")
+    check_in_date = models.DateTimeField(u"签到时间", null=True, blank=True)
 
     class Meta:
         verbose_name = u"签到"
@@ -100,7 +103,7 @@ class Class(BaseModel):
         verbose_name_plural = u"班级"
 
     def __unicode__(self):
-        return self.class_name
+        return u"%s年级 %s班" % (self.grade, self.class_name)
 
 
 class Course(BaseModel):
@@ -122,7 +125,7 @@ COURSE_STATUS = (
 )
 
 
-class ClassBegin():
+class ClassBegin(models.Model):
     created_at = models.DateTimeField(u"时间", null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
@@ -131,7 +134,7 @@ class ClassBegin():
     volunteer_id = models.ForeignKey(Volunteer, related_name="ccc")
     class_time = models.DateTimeField(u"上课时间", null=True, blank=True)
     status = models.IntegerField(default="0", choices=COURSE_STATUS)
-    evaluate = models.TextField(u"评价")
+    evaluate = models.TextField(u"评价", null=True, blank=True)
 
     class Meta:
         verbose_name = u"排班表"

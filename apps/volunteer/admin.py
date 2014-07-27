@@ -3,7 +3,7 @@ from apps.volunteer import models
 
 
 class VolunteersAdmin(admin.ModelAdmin):
-    list_display = ["account", "name", "nick_name", "phone_number"]
+    list_display = [ "name", "nick_name", "phone_number"]
 admin.site.register(models.Volunteer, VolunteersAdmin)
 
 
@@ -22,7 +22,7 @@ class SchoolAdmin(admin.ModelAdmin):
 admin.site.register(models.School, SchoolAdmin)
 
 class ClassBeginAdmin(admin.ModelAdmin):
-    list_display = ["course_id", "class_id","volunteer_id", ]
+    list_display = ["course_id", "class_id","volunteer_id", "status"]
 admin.site.register(models.ClassBegin, ClassBeginAdmin)
 
 
