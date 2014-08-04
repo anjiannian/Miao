@@ -1,7 +1,5 @@
 
-upstream flaskapp {
-    server 0.0.0.0:8056;
-}
+
 
 server {
 
@@ -25,5 +23,11 @@ server {
       fastcgi_param REMOTE_PORT       $remote_port;
       fastcgi_pass_header Authorization;
       fastcgi_intercept_errors off;
+    }
+
+    set home_dir "/opt/"
+
+    location /static/ {  # STATIC_URL
+        alias ${home_dir}static/;  
     }
 }
