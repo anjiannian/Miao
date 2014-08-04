@@ -1,0 +1,4 @@
+create user 'miao_mysql' identified by '123456';
+CREATE DATABASE `miao` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+grant all privileges on miao.* to miao_mysql@localhost identified by '123456';
+flush privileges;
