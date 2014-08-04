@@ -1,0 +1,4 @@
+apt-get install mysql-server-5.6
+apt-get install python-django
+apt-get install python-mysqldb
+apt-get install git
