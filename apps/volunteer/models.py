@@ -220,7 +220,7 @@ class Activity(models.Model):
     volunteer = models.ManyToManyField(Volunteer, related_name="volunteer", verbose_name="志愿者")
     assistant = models.ForeignKey(Volunteer, related_name="assistant", verbose_name="助教")
     class_time = models.DateTimeField(u"上课时间", null=True, blank=True)
-    status = models.IntegerField(default="0", choices=COURSE_STATUS)
+    status = models.IntegerField(u"状态", default="0", choices=COURSE_STATUS)
     class_evaluation = models.ManyToManyField(Evaluation, verbose_name="评价", null=True, blank=True)
 
     address = models.CharField(u"地址", max_length=100, null=True, blank=True)
