@@ -23,7 +23,7 @@ admin.site.register(models.School, SchoolAdmin)
 
 class ClassBeginAdmin(admin.ModelAdmin):
     list_display = ["course", "class_id","volunteer", "status"]
-admin.site.register(models.ClassBegin, ClassBeginAdmin)
+admin.site.register(models.Activity, ClassBeginAdmin)
 
 
 class CheckInAdmin(admin.ModelAdmin):
@@ -38,8 +38,8 @@ admin.site.register(models.Book, BookAdmin)
 
 class ClassEvaluationAdmin(admin.ModelAdmin):
     list_display = ["evaluation_value"]
-admin.site.register(models.ClassEvaluation, ClassEvaluationAdmin)
+admin.site.register(models.Evaluation, ClassEvaluationAdmin)
 
 class ClassEvaluationRuleAdmin(admin.ModelAdmin):
     list_display = ["item"]
-admin.site.register(models.ClassEvaluationRule, ClassEvaluationRuleAdmin)
+admin.site.register(models.EvaluationRule, ClassEvaluationRuleAdmin)
