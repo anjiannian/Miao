@@ -87,7 +87,7 @@ class Group(BaseModel):
 
 
 class CheckIn(BaseModel):
-    volunteer_id = models.ForeignKey(Volunteer, related_name="volunteer", verbose_name="志愿者")
+    volunteer = models.ForeignKey(Volunteer, related_name="volunteers", verbose_name="志愿者")
     check_in_date = models.DateTimeField(u"签到时间", null=True, blank=True)
 
     class Meta:
@@ -95,7 +95,7 @@ class CheckIn(BaseModel):
         verbose_name_plural = u"签到"
 
     def __unicode__(self):
-        return unicode(self.volunteer_id)
+        return unicode(self.volunteer)
 
 
 class Book(models.Model):
