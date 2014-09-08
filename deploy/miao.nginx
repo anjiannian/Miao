@@ -5,7 +5,7 @@ upstream django{
 
 server {
 
-    listen 8055;
+    listen 8080;
     server_name  0.0.0.0;
     access_log /var/log/nginx/miao.access.log;
     error_log /var/log/nginx/miao.error.log;
