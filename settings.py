@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + "/Miao/"
 
+import siteuser
 
+APPEND_SLASH = True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -50,6 +52,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'siteuser.middleware.User',
 )
 
 ROOT_URLCONF = 'urls'
@@ -64,9 +67,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'miao',
-        'USER': 'miao',
+        'USER': 'miao_mysql',
         'PASSWORD': "123456",
-        'HOST': '10.1.33.94',
+        'HOST': 'localhost',
         'PORT': 3306
     }
 }
@@ -88,7 +91,52 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 ADMIN_MEDIA_PREFIX = '/static/admin/'
-STATIC_ROOT = BASE_DIR + '/static/'
+STATIC_ROOT = BASE_DIR + '/static/'   #  use python manage.py collectstatic . to collect all static files
 STATIC_URL = '/static/'
 MEDIA_ROOT = BASE_DIR + '/media/'
 
+
+TEMPLATE_DIRS = (
+    siteuser.SITEUSER_TEMPLATE,
+    BASE_DIR + "templates/volunteer/",
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    'siteuser.context_processors.social_sites',
+
+)
+
+AVATAR_DIR = STATIC_ROOT + 'img/avatar/'   # 头像上传目录
+SITEUSER_EMAIL = {
+    'smtp_host': 'smtp.gmail.com',
+    'smtp_port': 25,
+    'username': 'xxx',
+    'password': 'xxx',
+    'from': 'xxx@gmail.com',
+    'display_from': '',
+}
+
+class SITEUSER_ACCOUNT_MIXIN(object):
+    login_template = 'login.html'           # 你项目的登录页面模板
+    register_template = 'register.html'     # 你项目的注册页面模板
+    reset_passwd_template = 'reset_password.html'   # 忘记密码的重置密码模板
+    change_passwd_template = 'change_password.html' # 登录用户修改密码的模板
+    reset_passwd_email_title = u'重置密码'    # 重置密码发送电子邮件的标题
+    reset_passwd_link_expired_in = 24        # 重置密码链接多少小时后失效
+    notify_template = "notify.html"
+
+    def get_login_context(self, request):
+        return {}
+
+    def get_register_context(self, request):
+        return {}
+
+
+
+from django.db import models
+class SITEUSER_EXTEND_MODEL(models.Model):
+    # some fields...
+    test_field = models.CharField(u"测试自动", max_length=12, null=True, blank=True)
+    class Meta:
+        abstract = True
