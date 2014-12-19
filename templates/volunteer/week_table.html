@@ -1,0 +1,64 @@
+<p><label for="id_week_table">可参加活动时间:</label>
+
+<table border="1" id="id_week_table">
+    <tr>
+        <th>时间\星期</th>
+        <th>星期一</th>
+        <th>星期二</th>
+        <th>星期三</th>
+        <th>星期四</th>
+        <th>星期五</th>
+        <th>星期六</th>
+        <th>星期日</th>
+    </tr>
+    <tbody id="id_week_tbody">
+        <tr id="id_morning">
+            <td><B>上午</B></td>
+            <td class="class_week_td" id="week_1"></td>
+            <td class="class_week_td" id="week_2"></td>
+            <td class="class_week_td" id="week_3"></td>
+            <td class="class_week_td" id="week_4"></td>
+            <td class="class_week_td" id="week_5"></td>
+            <td class="class_week_td" id="week_6"></td>
+            <td class="class_week_td" id="week_7"></td>
+        </tr>
+        <tr id="id_afternoon">
+            <td><B>下午</B></td>
+            <td class="class_week_td" id="week_1"></td>
+            <td class="class_week_td" id="week_2"></td>
+            <td class="class_week_td" id="week_3"></td>
+            <td class="class_week_td" id="week_4"></td>
+            <td class="class_week_td" id="week_5"></td>
+            <td class="class_week_td" id="week_6"></td>
+            <td class="class_week_td" id="week_7"></td>
+        </tr>
+    </tbody>
+</table>
+<script >
+    (function(){
+        load_week_time();
+        var class_week_td = $(".class_week_td");
+        class_week_td.hover(function(){
+            $(this).css("background-color", "#28C7BC");
+        });
+        class_week_td.mouseleave(function(){
+            var select_td = $(this);
+            if(select_td.text() != "O"){
+                select_td.css("background-color", "white");
+            }
+            else{
+                select_td.css("background-color", "red");
+            }
+        });
+        class_week_td.click(function(){
+            var select_td = $(this);
+            if(select_td.text() == "O"){
+                select_td.css("background-color", "white").text("");
+            }
+            else{
+                select_td.css("background-color", "red").text("O");
+            }
+        });
+    })();
+
+</script>

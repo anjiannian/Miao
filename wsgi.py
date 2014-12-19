@@ -11,8 +11,8 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Miao.settings")
 
 import sys
-home = "/opt/"
-sys.path.append("Miao/")
+home = "/root/workspace/"
+sys.path.append(home + "Miao/")
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

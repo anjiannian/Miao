@@ -12,8 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -64,9 +63,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'miao',
-        'USER': 'miao',
+        'USER': 'miao_mysql',
         'PASSWORD': "123456",
-        'HOST': '10.1.33.94',
+        'HOST': 'localhost',
         'PORT': 3306
     }
 }
@@ -88,7 +87,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 ADMIN_MEDIA_PREFIX = '/static/admin/'
+#  use python manage.py collectstatic . to collect all static files
 STATIC_ROOT = BASE_DIR + '/static/'
 STATIC_URL = '/static/'
 MEDIA_ROOT = BASE_DIR + '/media/'
+STATICFILES_DIRS = (
+    ("css", os.path.join(STATIC_ROOT, 'css')),
+    ("js", os.path.join(STATIC_ROOT, 'js')),
+)
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
 
+TEMPLATE_DIRS = (
+    BASE_DIR + "/templates/volunteer/",
+)
+
+LOGIN_URL = "/account/login/"

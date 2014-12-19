@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}志愿者申请{% endblock %}
+
+{% block link %}{% endblock %}
+
+{% block body %}
+
+    <h2>志愿者申请</h2>
+    <div id="content-main">
+        {% if message %}
+        <ul class="messagelist">
+          <li class="success">{{ message }}</li>
+        </ul>
+        {% endif %}
+        <form method="post" id="apply_form" action="">
+            <fieldset class="module aligned wide">
+            {% csrf_token %}
+            {{ volunteer_form.as_p }}
+            {% if volunteer_form.errors %}
+                <ol>
+                    {% for error in volunteer_form.subject.errors %}
+                    <li><strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+            {% include "week_table.html" %}
+                <div class="submit-row">
+                    <input type="button" value="申请" onclick="submit_apply();"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+{% endblock %}

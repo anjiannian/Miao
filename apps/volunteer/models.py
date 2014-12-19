@@ -39,7 +39,7 @@ class BaseModel(models.Model):
 
 
 class Volunteer(models.Model):
-    user = models.OneToOneField(User, verbose_name="账号")
+    user = models.OneToOneField(User, verbose_name="关联系统账号")
     name = models.CharField(u"真实名称", max_length=50)
     nick_name = models.CharField(u"昵称", max_length=50, null=True, blank=True)
     en_name = models.CharField(u"英文名称", max_length=50, null=True, blank=True)
@@ -47,7 +47,6 @@ class Volunteer(models.Model):
     age = models.IntegerField(u"年龄", null=True, blank=True)
     phone_number = models.CharField(u"联系方式", max_length=50)
     is_in_school = models.BooleanField(u"是否在校", default=False)
-    email = models.EmailField(u"邮箱", max_length=50, null=True, blank=True)
     wei_xin = models.CharField(u"微信账号", max_length=50, null=True, blank=True)
     weibo = models.CharField(u"微博帐号", max_length=50, null=True, blank=True)
     # ---------------------------education background
@@ -60,7 +59,10 @@ class Volunteer(models.Model):
     job = models.CharField(u"最近担任职务", max_length=50, null=True, blank=True)
     working_years = models.IntegerField(u"工作年限", null=True, blank=True)
 
-    self_introduction = models.TextField(u"自我介绍", null=True, blank=True)
+    why_in = models.TextField(u"为什么想加入", )
+    want_to = models.TextField(u"想从中获得", )
+
+    self_introduction = models.TextField(u"自我介绍", )
     volunteer_experience = models.TextField(u"志愿者工作经验", null=True, blank=True)
 
     free_time = models.TextField(u"空闲时间", null=True, blank=True)

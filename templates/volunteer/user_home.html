@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>苗苗阅读</title>
+
+</head>
+<body>
+
+
+</body>
+</html>
+
+{% extends "base.html" %}
+
+{% block link %}{% endblock %}
+
+{% block body %}
+    <h1>{{ username }}苗苗欢迎您的加入</h1>
+     <div id="content-main">
+            {% if message %}
+            <ul class="messagelist">
+              <li class="success">用户 "{{ username}}" 注册成功。</li>
+            </ul>
+            {% endif %}
+            <form method="post" >
+
+                <p>个人信息:</p>
+                <fieldset class="module aligned wide">
+                {% csrf_token %}
+                {% for key, value in user_info.items %}
+                    {% if key not in "_state, password, is_superuser "%}
+                        <p>{{ key }} : {{ value}}</p>
+                    {% endif %}
+                {% endfor %}
+
+                    <div class="submit-row">
+                        <input type="submit" value="信息修改"/>
+                    </div>
+                </fieldset>
+            </form>
+         <a href="/apply_volunteer/{{ user_info.id }}/" >志愿者申请 </a>
+     </div>
+
+{% endblock %}
