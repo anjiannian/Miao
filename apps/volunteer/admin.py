@@ -1,64 +1,67 @@
+#-*- coding: UTF-8 -*-
 from django.contrib import admin
+
+from custom_model_admin import CustomModelAdmin
 from apps.volunteer import models
 
 
-class VolunteersAdmin(admin.ModelAdmin):
+class VolunteersAdmin(CustomModelAdmin):
     list_display = ["name", "nick_name", "phone_number"]
 
 
 admin.site.register(models.Volunteer, VolunteersAdmin)
 
 
-class ClassesAdmin(admin.ModelAdmin):
+class ClassesAdmin(CustomModelAdmin):
     list_display = ["class_name", "grade"]
 
 
 admin.site.register(models.Class, ClassesAdmin)
 
 
-class CoursesAdmin(admin.ModelAdmin):
+class CoursesAdmin(CustomModelAdmin):
     list_display = ["name"]
 
 
 admin.site.register(models.Course, CoursesAdmin)
 
 
-class SchoolAdmin(admin.ModelAdmin):
+class SchoolAdmin(CustomModelAdmin):
     list_display = ["school_name", "description"]
 
 
 admin.site.register(models.School, SchoolAdmin)
 
 
-class ActivityAdmin(admin.ModelAdmin):
+class ActivityAdmin(CustomModelAdmin):
     list_display = ["course", "class_id", "activity_type", "status"]
 
 
 admin.site.register(models.Activity, ActivityAdmin)
 
 
-class CheckInAdmin(admin.ModelAdmin):
+class CheckInAdmin(CustomModelAdmin):
     list_display = ["volunteer", "created_at"]
 
 
 admin.site.register(models.CheckIn, CheckInAdmin)
 
 
-class BookAdmin(admin.ModelAdmin):
+class BookAdmin(CustomModelAdmin):
     list_display = ["name", "auth", "description"]
 
 
 admin.site.register(models.Book, BookAdmin)
 
 
-class EvaluationAdmin(admin.ModelAdmin):
+class EvaluationAdmin(CustomModelAdmin):
     list_display = ["evaluation_value"]
 
 
 admin.site.register(models.Evaluation, EvaluationAdmin)
 
 
-class EvaluationRuleAdmin(admin.ModelAdmin):
+class EvaluationRuleAdmin(CustomModelAdmin):
     list_display = ["item"]
 
 

@@ -72,6 +72,10 @@ class Volunteer(models.Model):
     class Meta:
         verbose_name = u"志愿者"
         verbose_name_plural = u"志愿者"
+        # default_permissions = ('add', 'change', 'delete', 'view')
+        permissions = (
+            ("view_task", "Can see available tasks"),
+        )
 
     def __unicode__(self):
         return self.name

@@ -38,8 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.volunteer',
-    'django.contrib.admin',
-    'django.contrib.staticfiles',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -75,11 +73,11 @@ DATABASES = {
 
 LANGUAGE_CODE = 'zh_cn'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -101,7 +99,14 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 )
 
+# make the templates have user's info and his permissions
+# http://www.cnblogs.com/esperyong/archive/2012/12/20/2826690.html
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+)
+
 TEMPLATE_DIRS = (
+    BASE_DIR + "/templates/",  # for reload admin templates
     BASE_DIR + "/templates/volunteer/",
 )
 
