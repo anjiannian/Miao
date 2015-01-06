@@ -6,7 +6,7 @@ from apps.volunteer import models
 
 
 class VolunteersAdmin(CustomModelAdmin):
-    list_display = ["name", "nick_name", "phone_number"]
+    list_display = ["name", "nick_name", "phone_number", "status"]
 
 
 admin.site.register(models.Volunteer, VolunteersAdmin)
