@@ -23,10 +23,17 @@
         </caption>
         {% for model in app.models %}
             <tr class="model-{{ model.object_name|lower }}">
+{#                {% templatetag openblock %}#}
+{#                     if perms.{{ model.object_name|lower }}.view_{{ model.object_name|lower }}#}
+{#                {% templatetag closeblock %}#}
+{#                   sdfsdfsdf#}
+{#               {% templatetag openblock %}#}
+{#                     endif#}
+{#                {% templatetag closeblock %}#}
             {% if model.admin_url %}
                 <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
             {% else %}
-                <th scope="row">{{ model.name }}</th>
+                <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
             {% endif %}
 
             {% if model.add_url %}

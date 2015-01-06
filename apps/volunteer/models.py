@@ -27,7 +27,30 @@ VOLUNTEER_STATUS = (
 )
 
 
-class BaseModel(models.Model):
+class PermissionModelMixin(models.Model):
+    # added_by = models.ForeignKey(User, null=True, blank=True)
+    #
+    # #def save(self, request, obj, form, change):
+    # def save(self, *args, **kwargs):
+    #     if getattr(self, 'added_by', None) is None:
+    #         self.added_by = request.user
+    #     self.last_modified_by = request.user
+    #     super(PermissionModelMixin, self).save(*args, **kwargs)
+
+    def queryset(self, request):
+        qs = super(PermissionModelMixin, self).queryset(request)
+
+        # If super-user, show all comments
+        if request.user.is_superuser:
+            return qs
+
+        return qs.filter(added_by=request.user)
+
+    # Abstract class . Will not generate a table
+    class Meta:
+        abstract = True
+
+class BaseModelMixin(models.Model):
     created_at = models.DateTimeField(u"时间", null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
     # 0-deleted, 1-normal, ...
@@ -39,7 +62,7 @@ class BaseModel(models.Model):
 
 
 class Volunteer(models.Model):
-    user = models.OneToOneField(User, verbose_name="关联系统账号")
+    user = models.OneToOneField(User, verbose_name="关联系统账号", related_name="volunteer_account")
     name = models.CharField(u"真实名称", max_length=50)
     nick_name = models.CharField(u"昵称", max_length=50, null=True, blank=True)
     en_name = models.CharField(u"英文名称", max_length=50, null=True, blank=True)
@@ -50,7 +73,7 @@ class Volunteer(models.Model):
     wei_xin = models.CharField(u"微信账号", max_length=50, null=True, blank=True)
     weibo = models.CharField(u"微博帐号", max_length=50, null=True, blank=True)
     # ---------------------------education background
-    xueli = models.CharField(u"最高学历", max_length=50, null=True, blank=True)
+    education_background = models.CharField(u"最高学历", max_length=50, null=True, blank=True)
     profession = models.CharField(u"专业", max_length=50, null=True, blank=True)
     grade = models.CharField(u"年级(在校学生)", max_length=50, null=True, blank=True)
     # ---------------------------working experience
@@ -72,16 +95,15 @@ class Volunteer(models.Model):
     class Meta:
         verbose_name = u"志愿者"
         verbose_name_plural = u"志愿者"
-        # default_permissions = ('add', 'change', 'delete', 'view')
         permissions = (
-            ("view_task", "Can see available tasks"),
+            ("view_volunteer", "Can see available volunteers"),
         )
 
     def __unicode__(self):
         return self.name
 
 
-class Group(BaseModel):
+class Group(BaseModelMixin):
     group_name = models.CharField(u"小组名称", max_length=50, unique=True)
 
     class Meta:
@@ -92,7 +114,7 @@ class Group(BaseModel):
         return self.account
 
 
-class CheckIn(BaseModel):
+class CheckIn(BaseModelMixin):
     volunteer = models.ForeignKey(Volunteer, related_name="volunteers", verbose_name="志愿者")
     check_in_date = models.DateTimeField(u"签到时间", null=True, blank=True)
 
@@ -104,7 +126,7 @@ class CheckIn(BaseModel):
         return unicode(self.volunteer)
 
 
-class Book(models.Model):
+class Book(BaseModelMixin):
     name = models.CharField(u"书名", max_length=50)
     auth = models.CharField(u"作者", max_length=50, null=True, blank=True)
     description = models.TextField(u"简介", null=True, blank=True)
@@ -117,7 +139,7 @@ class Book(models.Model):
         return self.name
 
 
-class School(BaseModel):
+class School(BaseModelMixin):
     id = models.AutoField(primary_key=True)
     school_name = models.CharField(u"学校名称", max_length=50)
     description = models.CharField(u"描述", max_length=50, null=True, blank=True)
@@ -132,7 +154,7 @@ class School(BaseModel):
         return self.school_name
 
 
-class Class(BaseModel):
+class Class(BaseModelMixin):
     class_name = models.CharField(u"班级", max_length=50)
     grade = models.CharField(u"年级", max_length=50)
     contact = models.CharField(u"联系人", max_length=50, null=True, blank=True)
@@ -147,7 +169,7 @@ class Class(BaseModel):
         return u"%s年级 %s班" % (self.grade, self.class_name)
 
 
-class Course(BaseModel):
+class Course(BaseModelMixin):
     name = models.CharField(u"课程名称", max_length=50)
     book = models.ForeignKey(Book, verbose_name="书")
     designer = models.ForeignKey(Volunteer, verbose_name="课程设计者")
@@ -170,7 +192,7 @@ EVALUATION_TYPE = (
 )
 
 
-class EvaluationRule(models.Model):
+class EvaluationRule(BaseModelMixin):
     item = models.CharField(u"评价项目", max_length=50)
     description = models.CharField(u"描述", max_length=50, null=True, blank=True)
     evaluation_type = models.IntegerField(u"类型", default=0, choices=EVALUATION_TYPE, null=True, blank=True)
@@ -192,7 +214,7 @@ EVALUATION = (
 )
 
 
-class Evaluation(models.Model):
+class Evaluation(BaseModelMixin):
     evaluation_rule = models.ForeignKey(EvaluationRule, verbose_name="评价规则")
     evaluation_value = models.IntegerField(u"评价", default="2", choices=EVALUATION)
 
@@ -220,7 +242,6 @@ ACTIVITY_TYPE = (
 class Activity(models.Model):
     created_at = models.DateTimeField(u"时间", null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
     course = models.ForeignKey(Course, verbose_name="课程")
     class_id = models.ForeignKey(Class, verbose_name="班级")
     volunteer = models.ManyToManyField(Volunteer, related_name="volunteer", verbose_name="志愿者")
@@ -232,6 +253,7 @@ class Activity(models.Model):
     address = models.CharField(u"地址", max_length=100, null=True, blank=True)
 
     activity_type = models.IntegerField(u"活动类型", default=0, choices=ACTIVITY_TYPE)
+    # 0-deleted, 1-normal, ...
 
     class Meta:
         verbose_name = u"活动"
