@@ -20,7 +20,7 @@ STATUS = (
 
 
 VOLUNTEER_STATUS = (
-    (0, u"申请中"),
+    (0, u"审核中"),
     (1, u"正常"),
     (2, u"注销"),
 )
@@ -239,6 +239,7 @@ ACTIVITY_TYPE = (
 
 
 class Activity(models.Model):
+    activity_name = models.CharField(u"名称", max_length=100)
     created_at = models.DateTimeField(u"时间", null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
     course = models.ForeignKey(Course, verbose_name="课程")
@@ -260,3 +261,17 @@ class Activity(models.Model):
 
     def __unicode__(self):
         return u"活动"
+
+
+class Homework(BaseModelMixin):
+    owner = models.OneToOneField(User, verbose_name="关联系统账号", related_name="homework_owner")
+    name = models.CharField(u"名称", max_length=100)
+    file_name = models.CharField(u"文件名称", max_length=100)
+    file_path = models.CharField(u"文件路径", max_length=100)
+
+    class Meta:
+        verbose_name = u"作业"
+        verbose_name_plural = u"作业"
+
+    def __unicode__(self):
+        return u"作业"

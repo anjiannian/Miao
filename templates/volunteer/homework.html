@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}作业{% endblock %}
+
+{% block link %}{% endblock %}
+
+{% block body %}
+
+    <h1>作业</h1>
+    <div >
+        {% for act in homework %}
+            <ul style="border:solid 1px red" >
+                <li>
+                    {{ act.name }}
+                </li>
+                <li>
+                    创建时间： {{ act.created_at }}
+                </li>
+                <li>
+                    更新时间： {{ act.updated_at }}
+                </li>
+            </ul>
+        {% endfor %}
+        <div>
+            <input type="file" value="提交作业" />
+        </div>
+    </div>
+
+
+{% endblock %}

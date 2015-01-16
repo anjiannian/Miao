@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 
-from models import Volunteer
+from models import Volunteer, Activity
 from utils import _
 
 
@@ -67,3 +67,14 @@ class CreationUserForm(forms.Form):
                 code='password_mismatch',
             )
         return password2
+
+
+class ActivityForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ActivityForm, self).__init__(*args, **kwargs)
+        # self.fields["why_in"].help_text = "请至少写3点"
+
+    class Meta:
+        model = Activity
+        # exclude = ('user', 'status')

@@ -29,8 +29,23 @@
         {% if volunteer_status == 0 %}
             <a href="/volunteer/status/{{ user.id }}/">志愿者状态查询 </a>
         {% elif volunteer_status == 1 %}
-            <a href="/volunteer/apply/{{ user.id }}/">志愿者信息修改</a>
-            <a href="/volunteer/history/{{ user.id }}/">个人历史活动回顾 </a>
+            <ul>
+                <li>
+                    <a href="/volunteer/apply/{{ user.id }}/">志愿者信息修改</a>
+                </li>
+                <li>
+                    <a href="/volunteer/history/{{ user.id }}/">个人历史活动回顾 </a>
+                </li>
+                <li>
+                    <a href="/activity/list/">查看活动 </a>
+                </li>
+                <li>
+                    <a href="/volunteer/homework/{{ user.id }}/">我的作业 </a>
+                </li>
+                <li>
+                    <a href="/volunteer/ask_for_leave/{{ user.id }}/">请假 </a>
+                </li>
+            </ul>
         {% else %}
             <a href="/volunteer/apply/{{ user.id }}/">志愿者申请 </a>
         {% endif %}
