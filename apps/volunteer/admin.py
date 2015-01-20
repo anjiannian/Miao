@@ -36,7 +36,7 @@ admin.site.register(models.CheckIn, CheckInAdmin)
 
 
 class BookAdmin(CustomModelAdmin):
-    list_display = ["name", "auth", "description"]
+    list_display = ["owner_school", "name", "auth", "description"]
 admin.site.register(models.Book, BookAdmin)
 
 
@@ -48,8 +48,3 @@ admin.site.register(models.Evaluation, EvaluationAdmin)
 class EvaluationRuleAdmin(CustomModelAdmin):
     list_display = ["item"]
 admin.site.register(models.EvaluationRule, EvaluationRuleAdmin)
-
-
-class HomeworkAdmin(CustomModelAdmin):
-    list_display = ["owner", "name", "file_name"]
-admin.site.register(models.Homework, HomeworkAdmin)

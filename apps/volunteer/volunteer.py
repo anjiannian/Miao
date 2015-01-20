@@ -5,10 +5,9 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
 
-from forms import VolunteerForm, CreationUserForm
-from models import Volunteer, VOLUNTEER_STATUS, Homework
+from forms import VolunteerForm, UploadHomework
+from models import Volunteer, VOLUNTEER_STATUS
 from settings import LOGIN_URL
 import utils
 
@@ -56,6 +55,7 @@ def volunteer_apply(request, user_id):
                 volunteer_model.free_time = request.POST.get("free_time")
                 volunteer_model.user_id = exist_user.id
                 volunteer_model.status = 0
+                volunteer_model.volunteer_type = '01'
 
                 volunteer_model.save()
             data["volunteer_form"] = volunteer_form
@@ -96,6 +96,23 @@ def ask_for_leave(request, user_id):
 @login_required(login_url=LOGIN_URL)
 def volunteer_homework(request, user_id):
     data = {}
-    homework = Homework.objects.filter(owner=user_id)
-    data["homework"] = homework
+    if request.method == "POST":
+        upload_form = UploadHomework(request.POST, request.FILES)
+        if upload_form.is_valid():
+            # homework_name = user_id + upload_form.cleaned_data["homework_name"]
+            # homework = Homework.objects.filter(owner=user_id, name=homework_name)
+            # if homework:   # update
+            #     homework.homework_file =
+            # else:   # new
+            #     homework = Homework(
+            #         owner=user_id,
+            #         name=homework_name)
+            # homework.save()
+            message = "上传成功"
+        else:
+            message = "上传失败"
+        data["message"] = message
+    homework_list = Homework.objects.filter(owner=user_id)
+    data["homework"] = homework_list
+    data["upload_form"] = UploadHomework()
     return render_to_response("homework.html", data, context_instance=RequestContext(request))

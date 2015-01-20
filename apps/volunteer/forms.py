@@ -78,3 +78,8 @@ class ActivityForm(ModelForm):
     class Meta:
         model = Activity
         # exclude = ('user', 'status')
+
+
+class UploadHomework(forms.Form):
+    homework_name = forms.CharField(label=u"作业名称", required=True)
+    upload_file = forms.FileField(label=u"作业名称", required=True, max_length=100)

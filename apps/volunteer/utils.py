@@ -25,3 +25,9 @@ def model_choice_2_dict(choice_obj):
         result_dict[element[0]] = element[1]
 
     return result_dict
+
+
+def handle_upload_file(f, saved_name, path):
+    with open(path + saved_name, 'wb') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)

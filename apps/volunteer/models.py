@@ -2,28 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-SEX_CHOICE = (
-    ("M", u"男"),
-    ("F", u"女")
-)
-
-USER_LEVEL = (
-    (0, u"管理员"),
-    (1, u"普通用户")
-)
-
-
-STATUS = (
-    (0, u"禁用"),
-    (1, u"正常"),
-)
-
-
-VOLUNTEER_STATUS = (
-    (0, u"审核中"),
-    (1, u"正常"),
-    (2, u"注销"),
-)
+from choice import *
 
 
 class PermissionModelMixin(models.Model):
@@ -31,7 +10,7 @@ class PermissionModelMixin(models.Model):
     #
     # #def save(self, request, obj, form, change):
     # def save(self, *args, **kwargs):
-    #     if getattr(self, 'added_by', None) is None:
+    # if getattr(self, 'added_by', None) is None:
     #         self.added_by = request.user
     #     self.last_modified_by = request.user
     #     super(PermissionModelMixin, self).save(*args, **kwargs)
@@ -49,6 +28,7 @@ class PermissionModelMixin(models.Model):
     class Meta:
         abstract = True
 
+
 class BaseModelMixin(models.Model):
     created_at = models.DateTimeField(u"时间", null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -62,16 +42,18 @@ class BaseModelMixin(models.Model):
 
 class Volunteer(models.Model):
     user = models.OneToOneField(User, verbose_name="关联系统账号", related_name="volunteer_account")
+    volunteer_type = models.CharField(u"志愿者类别", max_length='2', default='01', choices=VOLUNTEER_TYPE)
     name = models.CharField(u"真实名称", max_length=50)
     nick_name = models.CharField(u"昵称", max_length=50, null=True, blank=True)
     en_name = models.CharField(u"英文名称", max_length=50, null=True, blank=True)
     sex = models.CharField(u"性别", max_length=1, choices=SEX_CHOICE)
     age = models.IntegerField(u"年龄", null=True, blank=True)
     phone_number = models.CharField(u"联系方式", max_length=50)
-    is_in_school = models.BooleanField(u"是否在校", default=False)
     wei_xin = models.CharField(u"微信账号", max_length=50, null=True, blank=True)
     weibo = models.CharField(u"微博帐号", max_length=50, null=True, blank=True)
     # ---------------------------education background
+    is_in_school = models.BooleanField(u"是否在校", default=False)
+    graduated_school = models.CharField(u"毕业院校", max_length=50, null=True, blank=True)
     education_background = models.CharField(u"最高学历", max_length=50, null=True, blank=True)
     profession = models.CharField(u"专业", max_length=50, null=True, blank=True)
     grade = models.CharField(u"年级(在校学生)", max_length=50, null=True, blank=True)
@@ -85,11 +67,16 @@ class Volunteer(models.Model):
     want_to = models.TextField(u"想从中获得", )
 
     self_introduction = models.TextField(u"自我介绍", )
-    volunteer_experience = models.TextField(u"志愿者工作经验", null=True, blank=True)
-
+    volunteer_experience = models.TextField(u"志愿者服务经验", null=True, blank=True)
+    reference = models.CharField(u"推荐人", max_length=20, null=True, blank=True)
+    headshot = models.FileField(u"大头照", upload_to="headshot/", null=True, blank=True)
+    # 志愿者申请阶段
+    #=============================================================
     free_time = models.TextField(u"空闲时间", null=True, blank=True)
 
-    status = models.IntegerField(u"状态", default=0, choices=VOLUNTEER_STATUS, null=True, blank=True)
+    homework = models.FileField(u"文件名称", upload_to="homework/")
+
+    status = models.CharField(u"状态", max_length='2', choices=VOLUNTEER_STATUS, null=True, blank=True)
 
     class Meta:
         verbose_name = u"志愿者"
@@ -125,19 +112,6 @@ class CheckIn(BaseModelMixin):
         return unicode(self.volunteer)
 
 
-class Book(BaseModelMixin):
-    name = models.CharField(u"书名", max_length=50)
-    auth = models.CharField(u"作者", max_length=50, null=True, blank=True)
-    description = models.TextField(u"简介", null=True, blank=True)
-
-    class Meta:
-        verbose_name = u"书"
-        verbose_name_plural = u"书"
-
-    def __unicode__(self):
-        return self.name
-
-
 class School(BaseModelMixin):
     id = models.AutoField(primary_key=True)
     school_name = models.CharField(u"学校名称", max_length=50)
@@ -151,6 +125,20 @@ class School(BaseModelMixin):
 
     def __unicode__(self):
         return self.school_name
+
+
+class Book(BaseModelMixin):
+    owner_school = models.ForeignKey(School, verbose_name="所属学校")
+    name = models.CharField(u"书名", max_length=50)
+    auth = models.CharField(u"作者", max_length=50, null=True, blank=True)
+    description = models.TextField(u"简介", null=True, blank=True)
+
+    class Meta:
+        verbose_name = u"书"
+        verbose_name_plural = u"书"
+
+    def __unicode__(self):
+        return self.name
 
 
 class Class(BaseModelMixin):
@@ -182,15 +170,6 @@ class Course(BaseModelMixin):
         return self.name
 
 
-EVALUATION_TYPE = (
-    (0, u"课程"),
-    (1, u"志愿者"),
-    (2, u"书籍"),
-    (3, u"活动"),
-    (9, u"其他")
-)
-
-
 class EvaluationRule(BaseModelMixin):
     item = models.CharField(u"评价项目", max_length=50)
     description = models.CharField(u"描述", max_length=50, null=True, blank=True)
@@ -204,15 +183,6 @@ class EvaluationRule(BaseModelMixin):
         return self.item
 
 
-EVALUATION = (
-    (0, u"非常同意"),
-    (1, u"同意"),
-    (2, u"一般"),
-    (3, u"不同意"),
-    (4, u"非常不同意")
-)
-
-
 class Evaluation(BaseModelMixin):
     evaluation_rule = models.ForeignKey(EvaluationRule, verbose_name="评价规则")
     evaluation_value = models.IntegerField(u"评价", default="2", choices=EVALUATION)
@@ -223,19 +193,6 @@ class Evaluation(BaseModelMixin):
 
     def __unicode__(self):
         return "%s: %s" % (self.evaluation_rule.item, self.evaluation_value)
-
-
-COURSE_STATUS = (
-    (0, u"未开始"),
-    (1, u"未评估"),
-    (2, u"已评估"),
-)
-
-ACTIVITY_TYPE = (
-    (0, u"阅读"),
-    (1, u"伴读"),
-    (9, u"其他")
-)
 
 
 class Activity(models.Model):
@@ -262,16 +219,3 @@ class Activity(models.Model):
     def __unicode__(self):
         return u"活动"
 
-
-class Homework(BaseModelMixin):
-    owner = models.OneToOneField(User, verbose_name="关联系统账号", related_name="homework_owner")
-    name = models.CharField(u"名称", max_length=100)
-    file_name = models.CharField(u"文件名称", max_length=100)
-    file_path = models.CharField(u"文件路径", max_length=100)
-
-    class Meta:
-        verbose_name = u"作业"
-        verbose_name_plural = u"作业"
-
-    def __unicode__(self):
-        return u"作业"

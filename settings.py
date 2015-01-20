@@ -89,6 +89,7 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_ROOT = BASE_DIR + '/static/'
 STATIC_URL = '/static/'
 MEDIA_ROOT = BASE_DIR + '/media/'
+MEDIA_URL = '/media/'
 STATICFILES_DIRS = (
     ("css", os.path.join(STATIC_ROOT, 'css')),
     ("js", os.path.join(STATIC_ROOT, 'js')),
