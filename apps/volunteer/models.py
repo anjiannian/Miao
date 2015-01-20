@@ -70,13 +70,21 @@ class Volunteer(models.Model):
     volunteer_experience = models.TextField(u"志愿者服务经验", null=True, blank=True)
     reference = models.CharField(u"推荐人", max_length=20, null=True, blank=True)
     headshot = models.FileField(u"大头照", upload_to="headshot/", null=True, blank=True)
-    # 志愿者申请阶段
     #=============================================================
+    # 志愿者审核阶段
+    evaluation = models.TextField(u"审核结果", null=True, blank=True)
+    evaluate_time = models.TimeField(u'审核时间', null=True, blank=True)
+    #=============================================================
+    # 培训活动
+    training_time = models.TimeField(u'培训时间', null=True, blank=True)
+    evaluation_of_training = models.TextField(u"培训评价", null=True, blank=True)
+    #=============================================================
+    # 作业
+    homework = models.FileField(u"文件名称", upload_to="homework/", null=True, blank=True)
+
     free_time = models.TextField(u"空闲时间", null=True, blank=True)
 
-    homework = models.FileField(u"文件名称", upload_to="homework/")
-
-    status = models.CharField(u"状态", max_length='2', choices=VOLUNTEER_STATUS, null=True, blank=True)
+    status = models.CharField(u"状态", max_length='2', choices=VOLUNTEER_STATUS)
 
     class Meta:
         verbose_name = u"志愿者"

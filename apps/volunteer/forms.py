@@ -17,8 +17,14 @@ class VolunteerForm(ModelForm):
 
     class Meta:
         model = Volunteer
-        exclude = ('user', 'status')
+        exclude = ('volunteer_type','user', 'status', 'evaluation', 'evaluate_time',
+                   'training_time', 'evaluation_of_training', 'homework')
 
+    def clean_graduated_school(self):
+        graduated_school = self.cleaned_data["graduated_school"]
+        is_in_school = self.cleaned_data["is_in_school"]
+        if is_in_school and graduated_school == "":
+            raise forms.ValidationError("请输入毕业院校", code='graduated_school')
 
 class CreationUserForm(forms.Form):
     email = forms.EmailField(label=_("邮件"), required=True)

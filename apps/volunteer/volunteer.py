@@ -39,7 +39,11 @@ def volunteer_apply(request, user_id):
     template_name = "apply_volunteer.html"
     data = {}
     if request.method == "GET":
-        data["volunteer_form"] = VolunteerForm()
+        volunteer_model = Volunteer.objects.filter(user_id=user_id)
+        if volunteer_model:
+            data["volunteer_form"] = VolunteerForm(instance=volunteer_model[0])
+        else:
+            data["volunteer_form"] = VolunteerForm()
         return render_to_response(template_name, data,
                                   context_instance=RequestContext(request))
     else:  # POST
@@ -47,17 +51,17 @@ def volunteer_apply(request, user_id):
         if volunteer_form.is_valid():
             volunteer_model = Volunteer.objects.filter(user_id=user_id)
             if len(volunteer_model) > 0:
-                data["message"] = "您的申请已递交, 请勿重复提交。请等待管理员联系。 谢谢您的参与！"
+                data["message"] = "您的申请已修改。请等待管理员联系。 谢谢您的参与！"
+                volunteer_model = VolunteerForm(request.POST, instance=volunteer_model[0]).save(commit=False)
             else:
-                exist_user = User.objects.get(id=user_id)
                 data["message"] = "您的申请已递交，请等待管理员联系。 谢谢您的参与！"
                 volunteer_model = volunteer_form.save(commit=False)
-                volunteer_model.free_time = request.POST.get("free_time")
-                volunteer_model.user_id = exist_user.id
-                volunteer_model.status = 0
-                volunteer_model.volunteer_type = '01'
+            volunteer_model.free_time = request.POST.get("free_time")
+            volunteer_model.user_id = user_id
+            volunteer_model.status = '10'
+            volunteer_model.volunteer_type = '01'
 
-                volunteer_model.save()
+            volunteer_model.save()
             data["volunteer_form"] = volunteer_form
 
         else:
