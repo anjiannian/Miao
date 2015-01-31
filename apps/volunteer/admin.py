@@ -6,8 +6,34 @@ from apps.volunteer import models
 
 
 class VolunteersAdmin(CustomModelAdmin):
+    def queryset(self, request):
+        qs = super(CustomModelAdmin, self).queryset(request)
+
+        # If super-user, show all
+        if request.user.is_superuser:
+            return qs
+
+        filter_dict = {}
+        vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+        if vol_info.level == '02':   # group leader
+            pass
+        elif vol_info.level == '03':  # group master
+            # filter_dict[]
+            pass
+        return qs.filter(filter_dict)
+
+    readonly_fields = ("level", )
     list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
 admin.site.register(models.Volunteer, VolunteersAdmin)
+
+
+class VolunteerGroupAdmin(CustomModelAdmin):
+    def queryset(self, request):
+        qs = super(CustomModelAdmin, self).queryset(request)
+
+        return qs.filter(status=0)   # omit all obsolete data
+    list_display = ["group_name",]
+admin.site.register(models.VolunteerGroup, VolunteerGroupAdmin)
 
 
 class ClassesAdmin(CustomModelAdmin):

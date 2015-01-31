@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import Permission
 
+from models import Volunteer
+
 
 class CustomModelAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
@@ -17,4 +19,9 @@ class CustomModelAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
 
-        return qs.filter(added_by=request.user)
+        vol_info = Volunteer.objects.get(user_id=request.user.id)
+        if vol_info.level == '02':   # group leader
+            pass
+        elif vol_info.level == '03':  # group master
+            pass
+        return qs.filter(id=1)

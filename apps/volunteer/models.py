@@ -1,32 +1,10 @@
 # -*- encoding:utf-8 -*-
+
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 from choice import *
-
-
-class PermissionModelMixin(models.Model):
-    # added_by = models.ForeignKey(User, null=True, blank=True)
-    #
-    # #def save(self, request, obj, form, change):
-    # def save(self, *args, **kwargs):
-    # if getattr(self, 'added_by', None) is None:
-    #         self.added_by = request.user
-    #     self.last_modified_by = request.user
-    #     super(PermissionModelMixin, self).save(*args, **kwargs)
-
-    def queryset(self, request):
-        qs = super(PermissionModelMixin, self).queryset(request)
-
-        # If super-user, show all comments
-        if request.user.is_superuser:
-            return qs
-
-        return qs.filter(added_by=request.user)
-
-    # Abstract class . Will not generate a table
-    class Meta:
-        abstract = True
 
 
 class BaseModelMixin(models.Model):
@@ -40,11 +18,28 @@ class BaseModelMixin(models.Model):
         abstract = True
 
 
+class School(BaseModelMixin):
+    id = models.AutoField(primary_key=True)
+    school_name = models.CharField(u"学校名称", max_length=50)
+    description = models.CharField(u"描述", max_length=50, null=True, blank=True)
+    schoolmaster = models.CharField(u"校长", max_length=50)
+    schoolmaster_phone = models.CharField(u"校长联系方式", max_length=50)
+    address = models.CharField(u"地址", max_length=100, null=True, blank=True)
+
+    class Meta:
+        verbose_name = u"学校"
+        verbose_name_plural = u"学校"
+
+    def __unicode__(self):
+        return self.school_name
+
+
 class Volunteer(models.Model):
     created_at = models.DateTimeField(u"申请时间", auto_now_add=True)
     updated_at = models.DateTimeField(u"更新时间", null=True, blank=True, auto_now=True)
     user = models.OneToOneField(User, verbose_name="关联系统账号", related_name="volunteer_account")
-    volunteer_type = models.CharField(u"志愿者类别", max_length='2', default='01', choices=VOLUNTEER_TYPE)
+    volunteer_type = models.CharField(u"志愿者类别", max_length=2, default='01', choices=VOLUNTEER_TYPE)
+    level = models.CharField(u"级别", max_length=2, choices=VOLUNTEER_LEVEL, default='01')
     name = models.CharField(u"真实名称", max_length=50)
     nick_name = models.CharField(u"昵称", max_length=50, null=True, blank=True)
     en_name = models.CharField(u"英文名称", max_length=50, null=True, blank=True)
@@ -99,16 +94,26 @@ class Volunteer(models.Model):
         return self.name
 
 
-class Group(BaseModelMixin):
+class VolunteerGroup(BaseModelMixin):
     group_name = models.CharField(u"小组名称", max_length=50, unique=True)
+    school_for_work = models.ForeignKey(to=School, verbose_name="服务学校")
+    group_leader = models.ForeignKey(to=Volunteer, verbose_name="组长", related_name="group_leader")
+    effective_year = models.CharField(u"有效期--年", max_length=4, choices=YEARS)
+    effective_season = models.CharField(u"有效期--季度", max_length=1, choices=SEASON)
+    volunteers = models.ManyToManyField(Volunteer)
 
     class Meta:
         verbose_name = u"志愿者小组"
         verbose_name_plural = u"志愿者小组"
+        db_table = "volunteer_group"
 
     def __unicode__(self):
-        return self.account
+        return self.group_name
 
+    def clean(self):
+        # select a volunteer to the group's leader
+        if self.group_leader.level not in ['01', '02']:
+            raise ValidationError(u"志愿者%s不能被选为组长！" % self.group_leader.name)
 
 class CheckIn(BaseModelMixin):
     volunteer = models.ForeignKey(Volunteer, related_name="volunteers", verbose_name="志愿者")
@@ -120,22 +125,6 @@ class CheckIn(BaseModelMixin):
 
     def __unicode__(self):
         return unicode(self.volunteer)
-
-
-class School(BaseModelMixin):
-    id = models.AutoField(primary_key=True)
-    school_name = models.CharField(u"学校名称", max_length=50)
-    description = models.CharField(u"描述", max_length=50, null=True, blank=True)
-    schoolmaster = models.CharField(u"校长", max_length=50)
-    schoolmaster_phone = models.CharField(u"校长联系方式", max_length=50)
-    address = models.CharField(u"地址", max_length=100, null=True, blank=True)
-
-    class Meta:
-        verbose_name = u"学校"
-        verbose_name_plural = u"学校"
-
-    def __unicode__(self):
-        return self.school_name
 
 
 class Book(BaseModelMixin):
