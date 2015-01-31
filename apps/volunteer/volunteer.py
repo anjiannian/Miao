@@ -56,8 +56,10 @@ def volunteer_apply(request, user_id):
             else:
                 data["message"] = "您的申请已递交，请等待管理员联系。 谢谢您的参与！"
                 volunteer_model = volunteer_form.save(commit=False)
-            utils.handle_upload_file(request.FILES["headshot"], "hs_" + user_id + ".jpeg", MEDIA_ROOT + '/headshot/')
-            volunteer_model.headshot = "/media/headshot/" + "hs_" + user_id + ".jpeg"
+
+            if volunteer_form.cleaned_data.get("headshot"):
+                utils.handle_upload_file(request.FILES["headshot"], "hs_" + user_id + ".jpeg", MEDIA_ROOT + '/headshot/')
+                volunteer_model.headshot = "/media/headshot/" + "hs_" + user_id + ".jpeg"
             volunteer_model.free_time = request.POST.get("free_time")
             volunteer_model.user_id = user_id
             volunteer_model.status = '10'

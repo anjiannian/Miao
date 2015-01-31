@@ -32,10 +32,12 @@ class VolunteerForm(ModelForm):
 
     def clean_headshot(self):
         headshot = self.cleaned_data["headshot"]
-        if headshot.name.split(".")[-1].lower() not in ['jpeg', 'jpg']:
-            raise forms.ValidationError(_("上传文件格式错误。"), code='upload_headshot_format')
-        if headshot.size > 1024 * 1024 * 1024:
-            raise forms.ValidationError(_("上传文件过大，请压缩后上传。"), code='upload_headshot_size')
+
+        if headshot:
+            if headshot.name.split(".")[-1].lower() not in ['jpeg', 'jpg']:
+                raise forms.ValidationError(_("上传文件格式错误。"), code='upload_headshot_format')
+            if headshot.size > 1024 * 1024 * 1024:
+                raise forms.ValidationError(_("上传文件过大，请压缩后上传。"), code='upload_headshot_size')
 
 
 class CreationUserForm(forms.Form):
