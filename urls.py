@@ -27,11 +27,11 @@ urlpatterns += patterns('apps.volunteer.volunteer',
     url(r'^volunteer/homework/(?P<user_id>.*)/$', 'volunteer_homework'),
 )
 
-
+from django.conf.urls.static import static
 urlpatterns += patterns('apps.volunteer.activity',
     url(r'^activity/list/$', 'list_activity'),
     url(r'^activity/apply/(?P<choice>.*)/(?P<user_id>.*)/$', 'application'),
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += patterns(
     url(r'^static/(?P<path>.*)$', 'django.views.static.server',

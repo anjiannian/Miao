@@ -41,6 +41,8 @@ class BaseModelMixin(models.Model):
 
 
 class Volunteer(models.Model):
+    created_at = models.DateTimeField(u"申请时间", auto_now_add=True)
+    updated_at = models.DateTimeField(u"更新时间", null=True, blank=True, auto_now=True)
     user = models.OneToOneField(User, verbose_name="关联系统账号", related_name="volunteer_account")
     volunteer_type = models.CharField(u"志愿者类别", max_length='2', default='01', choices=VOLUNTEER_TYPE)
     name = models.CharField(u"真实名称", max_length=50)
@@ -124,7 +126,8 @@ class School(BaseModelMixin):
     id = models.AutoField(primary_key=True)
     school_name = models.CharField(u"学校名称", max_length=50)
     description = models.CharField(u"描述", max_length=50, null=True, blank=True)
-    contact = models.CharField(u"联系人", max_length=50, null=True, blank=True)
+    schoolmaster = models.CharField(u"校长", max_length=50)
+    schoolmaster_phone = models.CharField(u"校长联系方式", max_length=50)
     address = models.CharField(u"地址", max_length=100, null=True, blank=True)
 
     class Meta:
