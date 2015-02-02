@@ -115,6 +115,7 @@ class VolunteerGroup(BaseModelMixin):
         if self.group_leader.level not in ['01', '02']:
             raise ValidationError(u"志愿者%s不能被选为组长！" % self.group_leader.name)
 
+
 class CheckIn(BaseModelMixin):
     volunteer = models.ForeignKey(Volunteer, related_name="volunteers", verbose_name="志愿者")
     check_in_date = models.DateTimeField(u"签到时间", null=True, blank=True)

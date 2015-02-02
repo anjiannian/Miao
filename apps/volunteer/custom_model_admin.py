@@ -1,27 +1,14 @@
 from django.contrib import admin
-from django.contrib.auth.models import Permission
-
-from models import Volunteer
+from django.contrib.admin.util import flatten_fieldsets
 
 
 class CustomModelAdmin(admin.ModelAdmin):
-    def save_model(self, request, obj, form, change):
-        if getattr(obj, 'added_by', None) is None:
-            obj.added_by = request.user
-        obj.last_modified_by = request.user
-        obj.save()
-
-
-    def queryset(self, request):
-        qs = super(CustomModelAdmin, self).queryset(request)
-
-        # If super-user, show all comments
-        if request.user.is_superuser:
-            return qs
-
-        vol_info = Volunteer.objects.get(user_id=request.user.id)
-        if vol_info.level == '02':   # group leader
-            pass
-        elif vol_info.level == '03':  # group master
-            pass
-        return qs.filter(id=1)
+    def _get_all_fields(self, exclude_list=None):
+        if self.declared_fieldsets:
+            result = flatten_fieldsets(self.declared_fieldsets)
+        else:
+            result = list(set(
+                [field.name for field in self.opts.local_fields] +
+                [field.name for field in self.opts.local_many_to_many]
+            ))
+        return [field for field in result if field not in exclude_list]
