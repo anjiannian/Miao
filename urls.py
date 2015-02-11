@@ -7,16 +7,17 @@ admin.autodiscover()
 
 urlpatterns = patterns('apps.volunteer.views',
     url(r'^$', 'index'),
-    url(r'^error/$', 'error'),
+)
 
+urlpatterns += patterns('apps.volunteer.views',
+    url(r'^error/$', 'error'),
+                        
     url(r'^account/register/$', 'register_user'),
     url(r'^account/login/$', 'login_view'),
     url(r'^account/password_change/$', 'password_change_view'),
     url(r'^account/password_change_done/$', 'password_change_done'),
     url(r'^account/logout/$', 'logout'),
-
 )
-
 
 urlpatterns += patterns('apps.volunteer.volunteer',
     url(r'^volunteer/apply/(?P<user_id>.*)/$', 'volunteer_apply'),
