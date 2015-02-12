@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//apps/pub_page/models.py=utf-8
 encoding//apps/pub_page/views.py=utf-8
+encoding//apps/volunteer/models.py=utf-8
 encoding//apps/volunteer/views.py=utf-8
 encoding//apps/volunteer/volunteer.py=utf-8
