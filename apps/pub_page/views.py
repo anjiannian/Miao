@@ -5,9 +5,8 @@ from django.shortcuts import render
 def index(request):
     return render(request, 'pub_page/index.html')
 
-
-#def intro(request):
-#    return
+def intro(request):
+    return render(request, 'pub_page/intro.html')
 #
 #def content_lists(request):
 #    return
