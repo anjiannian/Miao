@@ -109,7 +109,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 TEMPLATE_DIRS = (
     # BASE_DIR + "/templates/",  # for reload admin templates
-    BASE_DIR + "/templates/volunteer/",
+    BASE_DIR + "/templates/",
 )
 
 LOGIN_URL = "/account/login/"

@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.conf import settings
 admin.autodiscover()
 
-urlpatterns = patterns('apps.volunteer.views',
+urlpatterns = patterns('apps.pub_page.views',
     url(r'^$', 'index'),
 )
 
