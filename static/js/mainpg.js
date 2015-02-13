@@ -2,7 +2,7 @@ function innerGuide(obj){
 	if((obj.id=="about_btn")||(obj.id=="about_btn0")) {
 		document.getElementById("guide").innerHTML="<tr><td class='inner_btn' ><a id='about_btn1' href='intro' >"+"项目介绍"+
 				"</a></td></tr>"+"<tr><td class='inner_btn'><a id='about_btn2' href='news' >"+"活动记录——导读课"+
-				"</a></td></tr>"+"<tr><td class='inner_btn'><a id='about_btn3'>"+"读书经验谈"+
+				"</a></td></tr>"+"<tr><td class='inner_btn'><a id='about_btn3' href='articles' >"+"读书经验谈"+
 				"</a></td></tr>"+"<tr><td class='inner_btn'><a id='about_btn4'>"+"项目拓展"+
 				"</a></td></tr>"+"<tr><td class='dead_btn'><a id='join_btn0' onmouseover='innerGuide(this)'>"+"加入我们"+
 				"</a></td></tr>";
