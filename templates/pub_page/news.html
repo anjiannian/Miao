@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <base href="<%=basePath %>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="/static/css/innerpg.css" rel="stylesheet" type="text/css" />
+    <link href="/static/css/newspg.css" rel="stylesheet" type="text/css" />
+    <title>{% block title %}苗苗阅读-导读课{% endblock %}</title>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+    <script type="text/javascript" src="js/slider.js"></script>
+    <script type="text/javascript" src="/static/js/mainpg.js"></script>
+    {% block link %}{% endblock %}
+</head>
+
+{% block body %}
+<div id="wrapper">
+	<div id="head_bar">
+		<h1><a href="../" ><img id="logo" alt="苗苗阅读" src="imgs/sources/logo.jpeg" /></a></h1>
+	</div>
+		
+	<div id="news_lst">
+		<div class="news_sum">
+			<h3>This is the title</h3>
+			<p>This is news' summary.</p>
+		</div>
+		<div class="news_sum">
+			<h3>This is the title</h3>
+			<p>This is news' summary</p>
+		</div>
+	</div>
+		
+	<div class="clear"></div>
+		<div id="foot">
+			<p>Copyright &copy; 2015 苗苗阅读 - All Rights Reserved</p>
+		</div>
+    </div>
+{% endblock %}

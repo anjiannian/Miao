@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('apps.pub_page.views',
     url(r'^$', 'index'),
     url(r'^intro/$', 'intro'),
+    url(r'^news/$', 'news')
 )
 
 urlpatterns += patterns('apps.volunteer.views',

@@ -20,19 +20,7 @@ body{
 	margin-bottom:10px;
 	background-color:#FFF;
 	color:#FFF;}
-#guide{
-	float:left;
-	width:39%;
-	margin-top:10px;
-	margin-bottom:10px;
-	height:360px;
-	background-color:;
-	border-spacing:0px;}
-#news_lst{
-	float:left;
-	width:100%;
-	height:300px;
-	background-color:#faffda;}
+
 .clear{
 	clear:both;
 }
@@ -47,48 +35,4 @@ body{
 	height:160px;
 }
 
-/* components in guide */
-.big_btn{
-	height:150px;
-	background-color:#df0;
-	font-size:240%;
-	text-align:center;
-	border-bottom: 10px solid #8a5;
-	border-top: 10px solid #8a5;
-}
-.inner_btn{
-	width:340px;
-	height:50px;
-	background-color:#df0;
-	sborder-left: 20px solid #8a5;
-	border-bottom: 1px solid #efb;
-	border-top: 1px solid #efb;
-	text-align:center;
-	font-size:140%;
-}
-.dead_btn{
-	width:340px;
-	height:50px;
-	background-color:#efb;
-	border-top: 10px solid #8a5;
-	border-bottom: 10px solid #8a5;
-	text-align:center;
-	font-size:140%;
-	color:#777;
-}
 
-/* components in news_win */
-.news_item{
-	width:100%;
-	height:100%;
-}
-#slider lu li {
-/*  padding-left:6px;
- float:left;
- text-indent:-9999px;
- width:16px;
- height:16px; */
- overflow:hidden;
- /* background-image:url(../images/number1.png);
- background-repeat:no-repeat; */
-}

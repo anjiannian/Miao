@@ -7,6 +7,8 @@ def index(request):
 
 def intro(request):
     return render(request, 'pub_page/intro.html')
+def news(request):
+    return render(request, 'pub_page/news.html')
 #
 #def content_lists(request):
 #    return
