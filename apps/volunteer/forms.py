@@ -10,6 +10,10 @@ from utils import _
 
 class VolunteerForm(ModelForm):
     free_time = forms.CharField(widget=forms.HiddenInput, required=True)
+    headshot = forms.FileField(
+        label=_("头像"),
+        help_text=_("jpeg/jpg. 文件需小于1M"),
+        required=False)
 
     def __init__(self, *args, **kwargs):
         super(VolunteerForm, self).__init__(*args, **kwargs)
@@ -18,13 +22,23 @@ class VolunteerForm(ModelForm):
     class Meta:
         model = Volunteer
         exclude = ('volunteer_type','user', 'status', 'evaluation', 'evaluate_time',
-                   'training_time', 'evaluation_of_training', 'homework')
+                   'training_time', 'evaluation_of_training', 'homework', 'headshot')
 
     def clean_graduated_school(self):
         graduated_school = self.cleaned_data["graduated_school"]
         is_in_school = self.cleaned_data["is_in_school"]
         if is_in_school and graduated_school == "":
             raise forms.ValidationError("请输入毕业院校", code='graduated_school')
+
+    def clean_headshot(self):
+        headshot = self.cleaned_data["headshot"]
+
+        if headshot:
+            if headshot.name.split(".")[-1].lower() not in ['jpeg', 'jpg']:
+                raise forms.ValidationError(_("上传文件格式错误。"), code='upload_headshot_format')
+            if headshot.size > 1024 * 1024 * 1024:
+                raise forms.ValidationError(_("上传文件过大，请压缩后上传。"), code='upload_headshot_size')
+
 
 class CreationUserForm(forms.Form):
     email = forms.EmailField(label=_("邮件"), required=True)

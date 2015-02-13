@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from forms import VolunteerForm, UploadHomework
 from models import Volunteer, VOLUNTEER_STATUS
-from settings import LOGIN_URL
+from settings import LOGIN_URL, MEDIA_ROOT
 import utils
 
 VOLUNTEER_STATUS_DICT = utils.model_choice_2_dict(VOLUNTEER_STATUS)
@@ -47,15 +47,19 @@ def volunteer_apply(request, user_id):
         return render_to_response(template_name, data,
                                   context_instance=RequestContext(request))
     else:  # POST
-        volunteer_form = VolunteerForm(request.POST)
+        volunteer_form = VolunteerForm(request.POST, request.FILES)
         if volunteer_form.is_valid():
             volunteer_model = Volunteer.objects.filter(user_id=user_id)
             if len(volunteer_model) > 0:
                 data["message"] = "您的申请已修改。请等待管理员联系。 谢谢您的参与！"
-                volunteer_model = VolunteerForm(request.POST, instance=volunteer_model[0]).save(commit=False)
+                volunteer_model = VolunteerForm(instance=volunteer_model[0]).save(commit=False)
             else:
                 data["message"] = "您的申请已递交，请等待管理员联系。 谢谢您的参与！"
                 volunteer_model = volunteer_form.save(commit=False)
+
+            if volunteer_form.cleaned_data.get("headshot"):
+                utils.handle_upload_file(request.FILES["headshot"], "hs_" + user_id + ".jpeg", MEDIA_ROOT + '/headshot/')
+                volunteer_model.headshot = "/media/headshot/" + "hs_" + user_id + ".jpeg"
             volunteer_model.free_time = request.POST.get("free_time")
             volunteer_model.user_id = user_id
             volunteer_model.status = '10'

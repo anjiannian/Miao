@@ -13,7 +13,7 @@
           <li class="success">{{ message }}</li>
         </ul>
         {% endif %}
-        <form method="post" id="apply_form" action="">
+        <form method="post" id="apply_form" action="" enctype="multipart/form-data">
             <fieldset class="module aligned wide">
             {% csrf_token %}
             {{ volunteer_form.as_p }}
