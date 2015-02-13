@@ -13,6 +13,7 @@ urlpatterns = patterns('apps.pub_page.views',
 )
 
 urlpatterns += patterns('apps.volunteer.views',
+    url(r'^volunteer/$', 'index'),
     url(r'^error/$', 'error'),
                         
     url(r'^account/register/$', 'register_user'),

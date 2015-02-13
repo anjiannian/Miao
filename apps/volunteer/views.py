@@ -26,7 +26,7 @@ def index(request):
     data = {
         "username": _get_current_username(request)
     }
-    return render_to_response("index.html", data, context_instance=RequestContext(request))
+    return render_to_response("volunteer/index.html", data, context_instance=RequestContext(request))
 
 
 def error(request):
