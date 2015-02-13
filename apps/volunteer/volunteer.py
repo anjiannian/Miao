@@ -29,14 +29,14 @@ def user_home(request, user_id):
     if volunteer_info :
         data["volunteer_status"] = volunteer_info[0].status
 
-    return render_to_response("user_home.html", data, context_instance=RequestContext(request))
+    return render_to_response("volunteer/user_home.html", data, context_instance=RequestContext(request))
 
 
 @csrf_protect
 @login_required(login_url=LOGIN_URL)
 def volunteer_apply(request, user_id):
     # before register volunteer, the user must be the system's user
-    template_name = "apply_volunteer.html"
+    template_name = "volunteer/apply_volunteer.html"
     data = {}
     if request.method == "GET":
         volunteer_model = Volunteer.objects.filter(user_id=user_id)
@@ -86,14 +86,14 @@ def volunteer_status(request, user_id):
 @login_required(login_url=LOGIN_URL)
 def volunteer_history(request, user_id):
     data = {}
-    return render_to_response("index.html", data, context_instance=RequestContext(request))
+    return render_to_response("volunteer/index.html", data, context_instance=RequestContext(request))
 
 
 @csrf_protect
 @login_required(login_url=LOGIN_URL)
 def ask_for_leave(request, user_id):
     data = {}
-    return render_to_response("index.html", data, context_instance=RequestContext(request))
+    return render_to_response("volunteer/index.html", data, context_instance=RequestContext(request))
 
 
 @csrf_protect
@@ -119,4 +119,4 @@ def volunteer_homework(request, user_id):
     homework_list = Homework.objects.filter(owner=user_id)
     data["homework"] = homework_list
     data["upload_form"] = UploadHomework()
-    return render_to_response("homework.html", data, context_instance=RequestContext(request))
+    return render_to_response("volunteer/homework.html", data, context_instance=RequestContext(request))
