@@ -15,8 +15,22 @@
 <div id="wrapper">
 	<div id="head_bar">
 		<h1><a href="../" ><img id="logo" alt="苗苗阅读" src="/static/imgs/logo.jpeg" /></a></h1>
-	</div>
-		
+
+        <div id="user-tools">
+            <strong>
+                 {{ user.username }}
+            </strong>
+            {% if user.is_authenticated %}
+            <a href="/account/password_change/">修改密码</a>
+            <a href="/account/logout/">退出</a>
+            <a href="/volunteer/home/{{ user.id }}/">用户详情</a>
+            {% else %}
+            <a href="/account/register/">注册</a>
+            <a href="/account/login/">登录</a>
+            {% endif %}
+        </div>
+    </div>
+    
 	<table id="guide" onmouseleave="outerGuide()">
 		<tr><td class="big_btn"><a id="about_btn" onmouseover="innerGuide(this)">关于苗苗阅读</a></td></tr>
 		<tr><td class="big_btn"><a id="join_btn" onmouseover="innerGuide(this)">加入我们</a></td></tr>
@@ -36,13 +50,53 @@
 	</div>
 		
 	<div id="news_lst" >
-		<div id="actv_lst">
-			<h3>活动记录——导读课</h3>
-			<ul><li></li></ul>
+		<div class="news_lst" id="actv_lst">
+			<h3>活动记录——导读课</h3><a href="news">更多</a>
+			<ul>
+				<li>activity record 1</li>
+				<li>activity record 2</li>
+				<li>activity record 3</li>
+				<li>activity record 4</li>
+				<li>activity record 5</li>
+				<li>activity record 6</li>
+				<li>activity record 7</li>
+			</ul>
 		</div>
-		<div id="vlnv_lst">
-			<h3>志愿者心声</h3>
-			<ul><li></li></ul>
+		<div class="news_lst" id="trains_lst">
+			<h3>志愿者培训</h3><a href="">更多</a>
+			<ul>
+				<li>train class 1</li>
+				<li>train class 2</li>
+				<li>train class 3</li>
+				<li>train class 4</li>
+				<li>train class 5</li>
+				<li>train class 6</li>
+				<li>train class 7</li>
+			</ul>
+		</div>
+		<div class="news_lst" id="articles_lst">
+			<h3>读书经验谈</h3><a href="articles">更多</a>
+			<ul>
+				<li>article 1</li>
+				<li>article 2</li>
+				<li>article 3</li>
+				<li>article 4</li>
+				<li>article 5</li>
+				<li>article 6</li>
+				<li>article 7</li>
+			</ul>
+		</div>
+		<div class="news_lst" id="vlnv_lst">
+			<h3>志愿者心声</h3><a href="">更多</a>
+			<ul>
+				<li>sounds 1</li>
+				<li>sounds 2</li>
+				<li>sounds 3</li>
+				<li>sounds 4</li>
+				<li>sounds 5</li>
+				<li>sounds 6</li>
+				<li>sounds 7</li>
+			</ul>
 		</div>
 	</div>
 		

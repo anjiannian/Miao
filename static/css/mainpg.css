@@ -3,14 +3,17 @@
 body{
 	margin:0px;
 	background-image:;
-	background-color:#8a5;
+	background-color:;
 	background-repeat:no-repeat;
 	background-attachment:fixed;
-	background-position:bottom;}
+	background-position:bottom;
+	font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
 #wrapper {
 	width:80%;
 	margin:auto;
-	background-color:;}
+	background-color:;
+}
 
 /* main components */
 #head_bar{
@@ -34,11 +37,10 @@ body{
 	margin-top:10px;
 	margin-bottom:10px;
 	height:360px;
-	background-color:#efe;}
+	background-color:#999;}
 #news_lst{
 	float:left;
 	width:100%;
-	height:300px;
 	background-color:#faffda;}
 .clear{
 	clear:both;
@@ -48,40 +50,58 @@ body{
 	color:#FFF;
 }
 
+/* common use */
+a{
+	text-decoration: none;
+}
+
+
 /* components in head_bar */
 #logo{
 	margin-left:50px;
 	height:160px;
 }
+#user-tools{
+	float:right;
+	margin-top:-50px;
+	margin-right:20px;
+}
+#user-tools a{
+	color:#8a5;
+}
 
 /* components in guide */
 .big_btn{
 	height:150px;
-	background-color:#df0;
+	background-color:#9c3;
 	font-size:240%;
 	text-align:center;
-	border-bottom: 10px solid #8a5;
-	border-top: 10px solid #8a5;
+	border-bottom: 10px solid #fff;
+	border-top: 10px solid #fff;
+	color:#fff;
 }
 .inner_btn{
 	width:340px;
 	height:50px;
-	background-color:#df0;
-	sborder-left: 20px solid #8a5;
-	border-bottom: 1px solid #efb;
-	border-top: 1px solid #efb;
+	background-color:#9c3;
+	sborder-left: 20px solid #efc;
+	border-bottom: 1px solid #efc;
+	border-top: 1px solid #efc;
 	text-align:center;
 	font-size:140%;
+}
+.inner_btn a{
+	color:#fff;
 }
 .dead_btn{
 	width:340px;
 	height:50px;
-	background-color:#efb;
-	border-top: 10px solid #8a5;
-	border-bottom: 10px solid #8a5;
+	background-color:#efc;
+	border-top: 10px solid #efc;
+	border-bottom: 10px solid #efc;
 	text-align:center;
 	font-size:140%;
-	color:#777;
+	color:#ccc;
 }
 
 /* components in news_win */
@@ -116,6 +136,19 @@ body{
 	margin-top:-50px;
 }
 
+/* components in news_lst */
+#news_lst div ul{
+	list-style-type:none;
+}
+.news_lst{
+	width:48%;
+	float:left;
+	margin:1%;
+}
+.news_lst a{
+	float:right;
+	margin-top:-40px;
+}
 
 
 

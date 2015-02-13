@@ -94,6 +94,7 @@ MEDIA_URL = '/media/'
 STATICFILES_DIRS = (
     ("css", os.path.join(STATIC_ROOT, 'css')),
     ("js", os.path.join(STATIC_ROOT, 'js')),
+    ("imgs", os.path.join(STATIC_ROOT, 'imgs')),
 )
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
