@@ -3,7 +3,7 @@
 body{
 	margin:0px;
 	background-image:;
-	background-color:;
+	background-color:#fff;
 	background-repeat:no-repeat;
 	background-attachment:fixed;
 	background-position:bottom;
@@ -21,8 +21,12 @@ body{
 	height:160px;
 	margin-top:10px;
 	margin-bottom:10px;
-	background-color:#FFF;
-	color:#FFF;}
+	background-color:;
+	background-image:;
+	background-repeat:repeat-x;
+	backgrount-position:bottom;
+	color:#FFF;
+}
 #guide{
 	float:right;
 	width:39%;
@@ -37,11 +41,13 @@ body{
 	margin-top:10px;
 	margin-bottom:10px;
 	height:360px;
-	background-color:#999;}
+	background-color:#999;
+}
 #news_lst{
 	float:left;
 	width:100%;
-	background-color:#faffda;}
+	background-color:;
+}
 .clear{
 	clear:both;
 }
@@ -54,7 +60,6 @@ body{
 a{
 	text-decoration: none;
 }
-
 
 /* components in head_bar */
 #logo{
@@ -138,7 +143,9 @@ a{
 
 /* components in news_lst */
 #news_lst div ul{
-	list-style-type:none;
+}
+#news_lst div ul li{
+	height:30px;
 }
 .news_lst{
 	width:48%;
@@ -147,8 +154,19 @@ a{
 }
 .news_lst a{
 	float:right;
-	margin-top:-40px;
+	margin-top:-10px;
+	color:#955;
+	font-size:70%;
 }
-
+h3{
+	margin-left:10px;
+	color:#800;
+	margin-bottom:0px;
+}
+hr{
+	color:#800;
+	background-color:#800;
+	border:1px solid #800;
+}
 
 
