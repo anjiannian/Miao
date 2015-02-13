@@ -34,7 +34,7 @@ def error(request):
     for key in request.GET:
         data[key] = request.GET.get(key)
 
-    return render_to_response("error.html", data)
+    return render_to_response("volunteer/error.html", data)
 
 
 #=====================================================================
@@ -44,7 +44,7 @@ def register_user(request):
         data = {
             "user_form": CreationUserForm()
         }
-        return render_to_response("register.html", data, context_instance=RequestContext(request))
+        return render_to_response("volunteer/register.html", data, context_instance=RequestContext(request))
     else:  # POST
         user_form = CreationUserForm(request.POST)
         data = {}
@@ -65,7 +65,7 @@ def register_user(request):
         else:
             data["user_form"] = user_form
 
-            return render_to_response("register.html", data, context_instance=RequestContext(request))
+            return render_to_response("volunteer/register.html", data, context_instance=RequestContext(request))
 
 
 @csrf_protect
@@ -83,16 +83,16 @@ def login_view(request):
                 data = {
                     "error_msg": "当前用户无法登陆"
                 }
-                return render_to_response('login.html', data, context_instance=RequestContext(request))
+                return render_to_response('volunteer/login.html', data, context_instance=RequestContext(request))
         else:
             data = {
                 "error_msg": "用户名称密码错误"
             }
-            return render_to_response('login.html', data, context_instance=RequestContext(request))
+            return render_to_response('volunteer/login.html', data, context_instance=RequestContext(request))
     else:
         # GET
 
-        return render_to_response('login.html', context_instance=RequestContext(request))
+        return render_to_response('volunteer/login.html', context_instance=RequestContext(request))
 
 
 @csrf_protect
@@ -100,14 +100,14 @@ def login_view(request):
 def password_change_view(request):
     from django.contrib.auth.views import password_change
 
-    return password_change(request, template_name="change_password.html",
+    return password_change(request, template_name="volunteer/change_password.html",
                            post_change_redirect="/account/password_change_done/")
 
 
 def password_change_done(request):
     from django.contrib.auth.views import password_change_done
 
-    return password_change_done(request, template_name='change_password_done.html')
+    return password_change_done(request, template_name='volunteer/change_password_done.html')
 
 
 def logout(request):
