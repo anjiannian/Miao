@@ -15,18 +15,43 @@
 {% block body %}
 <div id="wrapper">
 	<div id="head_bar">
-		<h1><a href="../" ><img id="logo" alt="苗苗阅读" src="imgs/sources/logo.jpeg" /></a></h1>
+		<h1><a href="../" ><img id="logo" alt="苗苗阅读" src="/static/imgs/logo.jpeg" /></a></h1>
+		
+		<div id="user-tools">
+            <strong>
+                 {{ user.username }}
+            </strong>
+            {% if user.is_authenticated %}
+            <a href="/account/password_change/">修改密码</a>
+            <a href="/account/logout/">退出</a>
+            <a href="/volunteer/home/{{ user.id }}/">用户详情</a>
+            {% else %}
+            <a href="/account/register/">注册</a>
+            <a href="/account/login/">登录</a><b> | </b>
+            <a href="../">返回首页</a>
+            {% endif %}
+        </div>
 	</div>
 		
 	<table id="intro_lst" onmouseleave="outerGuide()">
 		<tr><td class="entries"><a id="about_btn" onmouseover="innerGuide(this)">条目 1</a></td></tr>
-		<tr><td class="entries"><a id="join_btn" onmouseover="innerGuide(this)">条目 2</a></td></tr>
-		<tr><td class="entries"><a id="about_btn" onmouseover="innerGuide(this)">条目 3</a></td></tr>
-		<tr><td class="entries"><a id="join_btn" onmouseover="innerGuide(this)">条目 4</a></td></tr>
+		<tr><td class="dead_entries"><a id="join_btn" onmouseover="innerGuide(this)">条目 2</a></td></tr>
+		<tr><td class="dead_entries"><a id="about_btn" onmouseover="innerGuide(this)">条目 3</a></td></tr>
+		<tr><td class="dead_entries"><a id="join_btn" onmouseover="innerGuide(this)">条目 4</a></td></tr>
 	</table>
 		
 	<div id="content">
-
+		<h1>条目 1</h1>
+		<h2>我们是谁？</h2>
+		<p>苗苗阅读由一群喜爱阅读的职业经理人朋友在2012年6月发起，我们中的大多数人都来自名企，并有多年的工作经验。经过调研上海农民工子弟学校，我们发现上海不少农民工子弟小学的图书资源没有得到有效利用。同时，我们从自身成长经历中也发现阅读习惯对于一个人的成长是非常重要的。</p>
+		<p>于是我们决定成立一个公益项目，专门针对提升农民工子女的阅读兴趣服务，通过培养其养成阅读兴趣进而改善其未来成长命运。</p>
+		<p>我们相信书籍助益儿童成长，阅读滋养未来生命。</p>
+		<h2>我们的公益理念</h2>
+		<p>长期：我们立足长期耕耘，教育需要长线投资</p>
+		<p>身边：我们立足身边的公益，每周都可以与受益班级进行深度接触</p>
+		<p>有效：我们的所有行动都立足是否对孩子们有用</p>
+		<p>合作：不仅是我们在做，同时会深度影响学校与老师；不仅我们做，还会带动高校、企业一起参与</p>
+		<p>专业：我们一开始就钻研了大量儿童阅读理论，并邀请资深儿童阅读专家成为我们的顾问给我们进行指导，并开发了一整套的志愿者培训体系。</p>
 	</div>
 		
 	<div class="clear"></div>

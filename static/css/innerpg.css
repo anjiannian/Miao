@@ -3,10 +3,12 @@
 body{
 	margin:0px;
 	background-image:;
-	background-color:#8a5;
+	background-color:#fff;
 	background-repeat:no-repeat;
 	background-attachment:fixed;
-	background-position:bottom;}
+	background-position:bottom;
+	font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
 #wrapper {
 	width:80%;
 	margin:auto;
@@ -19,20 +21,39 @@ body{
 	margin-top:10px;
 	margin-bottom:10px;
 	background-color:#FFF;
-	color:#FFF;}
+	color:#FFF;
+}
 
 .clear{
 	clear:both;
 }
 #foot{
 	text-align:center;
-	color:#FFF;
+	color:#999;
+	font-size:small;
+}
+
+/* common */
+a{
+	text-decoration: none;
 }
 
 /* components in head_bar */
 #logo{
+	margin-top:-20px;
 	margin-left:50px;
-	height:160px;
+	height:120px;
 }
+#user-tools{
+	float:right;
+	margin-top:-60px;
+	margin-bottom:0px;
+	margin-right:20px;
+	color:#8a5;
+}
+#user-tools a{
+	color:#8a5;
+}
+
 
 

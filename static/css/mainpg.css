@@ -34,7 +34,8 @@ body{
 	margin-bottom:10px;
 	height:360px;
 	background-color:;
-	border-spacing:0px;}
+	border-spacing:0px;
+}
 #news_win{
 	float:left;
 	width:59%;
@@ -53,7 +54,8 @@ body{
 }
 #foot{
 	text-align:center;
-	color:#FFF;
+	color:#999;
+	font-size:small;
 }
 
 /* common use */
