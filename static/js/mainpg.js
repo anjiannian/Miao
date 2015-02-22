@@ -11,8 +11,8 @@ function innerGuide(obj){
 	else if((obj.id=="join_btn")||(obj.id=="join_btn0")) {
 		document.getElementById("guide").innerHTML="<tr><td class='dead_btn'><a id='about_btn0' onmouseover='innerGuide(this)'>"+"关于苗苗阅读"+
 		"</a></td></tr>"+"<tr><td class='inner_btn'><a id='join_btn1' href='../volunteer/' >"+"加入我们"+
-		"</a></td></tr>"+"<tr><td class='inner_btn'><a id='join_btn2'>"+"志愿者心声"+
-		"</a></td></tr>"+"<tr><td class='inner_btn'><a id='join_btn3'>"+"志愿者培训"+
+		"</a></td></tr>"+"<tr><td class='inner_btn'><a id='join_btn2' href='feelings'>"+"志愿者心声"+
+		"</a></td></tr>"+"<tr><td class='inner_btn'><a id='join_btn3' href='train_classes'>"+"志愿者培训"+
 		"</a></td></tr>"+"<tr><td class='inner_btn'><a id='join_btn4'>"+"相关资料"+
 		"</a></td></tr>";
 		return true;
