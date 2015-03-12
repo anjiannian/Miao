@@ -100,7 +100,7 @@ class VolunteerGroup(BaseModelMixin):
     group_leader = models.ForeignKey(to=Volunteer, verbose_name="组长", related_name="group_leader")
     effective_year = models.CharField(u"有效期--年", max_length=4, choices=YEARS)
     effective_season = models.CharField(u"有效期--季度", max_length=1, choices=SEASON)
-    volunteers = models.ManyToManyField(Volunteer)
+    volunteers = models.ManyToManyField(Volunteer, related_name="volunteer_groups")
 
     class Meta:
         verbose_name = u"志愿者小组"
@@ -115,6 +115,17 @@ class VolunteerGroup(BaseModelMixin):
         if self.group_leader.level not in ['01', '02']:
             raise ValidationError(u"志愿者%s不能被选为组长！" % self.group_leader.name)
 
+
+class OperatorRegion(BaseModelMixin):
+    operator = models.ForeignKey(to=Volunteer, verbose_name="运营管理员", related_name="operator_region")
+    schools = models.ManyToManyField(School, related_name="schools_in_region")
+
+    class Meta:
+        verbose_name = u"运营管理范围"
+        verbose_name_plural = u"运营管理范围"
+
+    def __unicode__(self):
+        return self.operator.name
 
 class CheckIn(BaseModelMixin):
     volunteer = models.ForeignKey(Volunteer, related_name="volunteers", verbose_name="志愿者")

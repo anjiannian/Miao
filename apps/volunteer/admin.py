@@ -1,13 +1,67 @@
 #-*- coding: UTF-8 -*-
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from custom_model_admin import CustomModelAdmin
 from apps.volunteer import models
+import db_utils
 
 
+# ==================================================================
+# =======================auth admin=================================
+class SelfUserAdmin(UserAdmin):
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super(UserAdmin, self).get_fieldsets(request, obj)
+        if not obj:
+            return self.add_fieldsets
+        if not request.user.is_superuser:
+            fieldsets = (
+                    (None, {'fields': ('username', 'password')}),
+                    (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+                    (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+                )
+        return fieldsets
+
+    def get_queryset(self, request):
+        qs = super(SelfUserAdmin, self).get_queryset(request)
+
+        # only sys_admin and operator can edit auth's user info
+        # If super-user, show all
+        if request.user.is_superuser:
+            return qs
+        else:  # only operator
+            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+            if vol_info.level == '03':
+                region_records = vol_info.operator_region.all()
+                schools = []
+                for r in region_records:
+                    for s in r.schools.all():
+                        schools.append(s.id)
+                volunteer_groups = models.VolunteerGroup.objects.filter(school_for_work__in=schools)
+                all_user_in_region = []
+                for g in volunteer_groups:
+                    for v in g.volunteers.all():
+                        all_user_in_region.append(v.user.id)
+
+                return qs.filter(id__in=all_user_in_region)
+            else:
+                return None
+
+    # def get_form(self, request, obj=None, **kwargs):
+    #     # if not request.user.is_superuser:
+    #     #     return None
+    #     return super(SelfUserAdmin, self).get_form(request, obj=None, **kwargs)
+admin.site.unregister(User)
+admin.site.register(User, SelfUserAdmin)
+
+# ==================================================================
+# =======================self admin=================================
 class VolunteersAdmin(CustomModelAdmin):
-    def queryset(self, request):
-        qs = super(CustomModelAdmin, self).queryset(request)
+    def get_queryset(self, request):
+        qs = super(CustomModelAdmin, self).get_queryset(request)
 
         # If super-user, show all
         if request.user.is_superuser:
@@ -23,9 +77,7 @@ class VolunteersAdmin(CustomModelAdmin):
 
             filter_dict["id__in"] = [v.id for v in group_members.volunteers.all()]
         elif vol_info.level == '03':  # group master
-            # filter_dict[]
-            self.readonly_fields = ("phone_number", "level")
-            self.list_display.remove("level")
+            pass
         return qs.filter(**filter_dict)
 
     def get_readonly_fields(self, request, obj=None):
@@ -51,7 +103,6 @@ class VolunteersAdmin(CustomModelAdmin):
                                 "homework", "free_time", )
             elif vol_info.level == '03':  # group master
                 self.readonly_fields = ("level",)
-                # filter_dict[]
         return super(VolunteersAdmin, self).get_form(request, obj=None, **kwargs)
 
     list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
@@ -59,10 +110,34 @@ admin.site.register(models.Volunteer, VolunteersAdmin)
 
 
 class VolunteerGroupAdmin(CustomModelAdmin):
-    # def queryset(self, request):
-    #     qs = super(CustomModelAdmin, self).queryset(request)
-    #
-    #     return qs.filter(status=0)   # omit all obsolete data
+
+    def queryset(self, request):
+        qs = super(CustomModelAdmin, self).queryset(request).filter(status='1')
+        if not request.user.is_superuser:
+            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+            if vol_info.level == '01':   # normal volunteer
+                qs = None
+            elif vol_info.level == '02':   # group leader
+                qs = qs.filter(group_leader=vol_info.id)
+            elif vol_info.level == '03':  # operator
+                qs = qs.filter(school_for_work__in=db_utils.get_operators_schools(vol_info.id))
+
+        return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(VolunteerGroupAdmin, self).get_form(request, obj=None, **kwargs)
+        if not request.user.is_superuser:
+            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+            if vol_info.level == '01':   # normal volunteer
+                return None
+            elif vol_info.level == '02':   # group leader
+                region_schools = db_utils.get_group_leader_schools(vol_info)
+            elif vol_info.level == '03':  # operator
+                region_schools = db_utils.get_operators_schools(vol_info.id)
+            form.base_fields["school_for_work"].queryset = \
+                models.School.objects.filter(id__in=region_schools)
+
+        return form
     list_display = ["group_name",]
 admin.site.register(models.VolunteerGroup, VolunteerGroupAdmin)
 
@@ -105,3 +180,15 @@ admin.site.register(models.Evaluation, EvaluationAdmin)
 class EvaluationRuleAdmin(CustomModelAdmin):
     list_display = ["item"]
 admin.site.register(models.EvaluationRule, EvaluationRuleAdmin)
+
+
+class OperatorRegionAdmin(CustomModelAdmin):
+    list_display = ["operator", "status"]
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(OperatorRegionAdmin, self).get_form(request, obj=None, **kwargs)
+        form.base_fields["operator"].queryset = models.Volunteer.objects.filter(level="03")
+
+        return form
+
+admin.site.register(models.OperatorRegion, OperatorRegionAdmin)
