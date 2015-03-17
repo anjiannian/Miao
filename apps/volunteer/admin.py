@@ -93,6 +93,8 @@ class VolunteersAdmin(CustomModelAdmin):
         return readonly_fields
 
     def get_form(self, request, obj=None, **kwargs):
+        form = super(VolunteersAdmin, self).get_form(request, obj=None, **kwargs)
+
         if not request.user.is_superuser:
             vol_info = models.Volunteer.objects.get(user_id=request.user.id)
             if vol_info.level == '01':   # normal volunteer
@@ -103,8 +105,21 @@ class VolunteersAdmin(CustomModelAdmin):
                                 "homework", "free_time", )
             elif vol_info.level == '03':  # group master
                 self.readonly_fields = ("level",)
-        return super(VolunteersAdmin, self).get_form(request, obj=None, **kwargs)
+        return form
 
+    # change-page's form
+    fieldsets = (
+        (u"基本信息", {
+            'fields': ('name', 'nick_name', 'en_name', 'sex', 'age', 'phone_number',
+                       'wei_xin', 'weibo')
+        }),
+        (u'审核信息', {
+            'fields': ('evaluation', 'evaluate_time')
+        }),
+        (u'培训信息', {
+            'fields': ('training_time', 'evaluation_of_training', 'homework')
+        })
+    )
     list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
 admin.site.register(models.Volunteer, VolunteersAdmin)
 

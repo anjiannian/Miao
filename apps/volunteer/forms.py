@@ -22,7 +22,8 @@ class VolunteerForm(ModelForm):
     class Meta:
         model = Volunteer
         exclude = ('volunteer_type','user', 'status', 'evaluation', 'evaluate_time',
-                   'training_time', 'evaluation_of_training', 'homework', 'headshot')
+                   'training_time', 'evaluation_of_training', 'homework', 'headshot',
+                   'volunteer_type', 'level')
 
     def clean_graduated_school(self):
         graduated_school = self.cleaned_data["graduated_school"]
