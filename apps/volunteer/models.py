@@ -69,15 +69,16 @@ class Volunteer(models.Model):
     headshot = models.FileField(u"大头照", upload_to="headshot/", null=True, blank=True)
     #=============================================================
     # 志愿者审核阶段
-    evaluation = models.TextField(u"审核结果", null=True, blank=True)
-    evaluate_time = models.TimeField(u'审核时间', null=True, blank=True)
+    evaluation = models.TextField(u"审核评价", null=True, blank=True)
+    eva_result = models.CharField(u"审核是否通过", choices=YES_NO, default=0, max_length=1)
+    evaluate_time = models.DateTimeField(u'审核时间', null=True, blank=True)
     #=============================================================
     # 培训活动
-    training_time = models.TimeField(u'培训时间', null=True, blank=True)
+    training_time = models.DateTimeField(u'培训时间', null=True, blank=True)
     evaluation_of_training = models.TextField(u"培训评价", null=True, blank=True)
     #=============================================================
     # 作业
-    homework = models.FileField(u"文件名称", upload_to="homework/", null=True, blank=True)
+    homework = models.FileField(u"作业文件", upload_to="homework/", null=True, blank=True)
 
     free_time = models.TextField(u"空闲时间", null=True, blank=True)
 

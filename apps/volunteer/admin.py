@@ -109,15 +109,31 @@ class VolunteersAdmin(CustomModelAdmin):
 
     # change-page's form
     fieldsets = (
+        (u'名称', {
+            'fields': ('name', 'phone_number')
+        }),
         (u"基本信息", {
-            'fields': ('name', 'nick_name', 'en_name', 'sex', 'age', 'phone_number',
-                       'wei_xin', 'weibo')
+            'fields': ('nick_name', 'en_name', 'sex', 'age',
+                       'wei_xin', 'weibo', 'is_in_school', 'graduated_school',
+                       'education_background', 'profession', 'grade', 'forte',
+                       'recent_company', 'job', 'working_years'),
+            'classes': ('collapse ',)
+        }),
+        (u'志愿者申请信息', {
+            'fields': ('why_in', 'want_to', 'self_introduction', 'volunteer_experience',
+                       'reference', 'headshot'),
+            'classes': ('collapse ',)
         }),
         (u'审核信息', {
-            'fields': ('evaluation', 'evaluate_time')
+            'fields': ('evaluation', 'evaluate_time'),
+            'classes': ('collapse ',)
         }),
         (u'培训信息', {
-            'fields': ('training_time', 'evaluation_of_training', 'homework')
+            'fields': ('training_time', 'evaluation_of_training', 'homework'),
+            'classes': ('collapse ',)
+        }),
+        (None, {
+            'fields': ('status', )
         })
     )
     list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
