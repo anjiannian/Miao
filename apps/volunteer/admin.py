@@ -60,6 +60,7 @@ admin.site.register(User, SelfUserAdmin)
 # ==================================================================
 # =======================self admin=================================
 class VolunteersAdmin(CustomModelAdmin):
+
     def get_queryset(self, request):
         qs = super(CustomModelAdmin, self).get_queryset(request)
 
@@ -75,39 +76,31 @@ class VolunteersAdmin(CustomModelAdmin):
                 status=1
             )[0]
 
-            filter_dict["id__in"] = [v.id for v in group_members.volunteers.all()]
-        elif vol_info.level == '03':  # group master
-            pass
-        return qs.filter(**filter_dict)
+            return group_members.volunteers
+        elif vol_info.level == '03':
+            # operator 所有未审核的 和 自己所管辖下的所有志愿者
+            un_evaluate_vol = models.Volunteer.objects.filter(status='10')
+            evaluated_vol = db_utils.get_operators_vols(vol_info.id)
+            return un_evaluate_vol | evaluated_vol
 
-    def get_readonly_fields(self, request, obj=None):
-        readonly_fields = self.readonly_fields
-        if not request.user.is_superuser:
-            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
-            if vol_info.level == '01':   # normal volunteer
-                pass
-            elif vol_info.level == '02':   # group leader
-                readonly_fields = self._get_all_fields(exclude_list=["status"])
-            elif vol_info.level == '03':  # group master
-                readonly_fields = ("level",)
-        return readonly_fields
+        return qs
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super(VolunteersAdmin, self).get_form(request, obj=None, **kwargs)
+    # def get_form(self, request, obj=None, **kwargs):
+    #     form = super(VolunteersAdmin, self).get_form(request, obj=None, **kwargs)
+    #
+    #     if not request.user.is_superuser:
+    #         vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+    #         if vol_info.level == '01':   # normal volunteer
+    #             pass
+    #         elif vol_info.level == '02':   # group leader
+    #             self.exclude = ("level", "volunteer_type", "evaluation",
+    #                             "evaluate_time", "training_time", "evaluation_of_training",
+    #                             "homework", "free_time", )
+    #         elif vol_info.level == '03':  # group master
+    #             # self.readonly_fields = ("level",)
+    #             pass
+    #     return form
 
-        if not request.user.is_superuser:
-            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
-            if vol_info.level == '01':   # normal volunteer
-                pass
-            elif vol_info.level == '02':   # group leader
-                self.exclude = ("level", "volunteer_type", "evaluation",
-                                "evaluate_time", "training_time", "evaluation_of_training",
-                                "homework", "free_time", )
-            elif vol_info.level == '03':  # group master
-                self.readonly_fields = ("level",)
-        return form
-
-    # change-page's form
     fieldsets = (
         (u'名称', {
             'fields': ('name', 'phone_number')
@@ -136,12 +129,28 @@ class VolunteersAdmin(CustomModelAdmin):
             'fields': ('status', )
         })
     )
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = self.fieldsets
+        if not request.user.is_superuser:
+            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+            if vol_info.level == '02':   # group leader
+                fieldsets = (fieldsets[0], fieldsets[1], fieldsets[5])
+                fields = []
+                for s in fieldsets:
+                    for f in s[1]["fields"]:
+                        fields.append(f)
+                self.readonly_fields = tuple(fields)
+            elif vol_info.level == '03':
+                pass
+
+        return fieldsets
+
     list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
 admin.site.register(models.Volunteer, VolunteersAdmin)
 
 
 class VolunteerGroupAdmin(CustomModelAdmin):
-
+    filter_horizontal = ('volunteers',)
     def queryset(self, request):
         qs = super(CustomModelAdmin, self).queryset(request).filter(status='1')
         if not request.user.is_superuser:
@@ -159,14 +168,11 @@ class VolunteerGroupAdmin(CustomModelAdmin):
         form = super(VolunteerGroupAdmin, self).get_form(request, obj=None, **kwargs)
         if not request.user.is_superuser:
             vol_info = models.Volunteer.objects.get(user_id=request.user.id)
-            if vol_info.level == '01':   # normal volunteer
-                return None
-            elif vol_info.level == '02':   # group leader
+            if vol_info.level == '02':   # group leader
                 region_schools = db_utils.get_group_leader_schools(vol_info)
             elif vol_info.level == '03':  # operator
                 region_schools = db_utils.get_operators_schools(vol_info.id)
-            form.base_fields["school_for_work"].queryset = \
-                models.School.objects.filter(id__in=region_schools)
+            form.base_fields["school_for_work"].queryset = region_schools
 
         return form
     list_display = ["group_name",]

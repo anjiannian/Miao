@@ -1,5 +1,7 @@
 {% extends "admin/change_form.html" %}
 {% load i18n admin_urls %}
+{% load url from future %}
+{% load admin_urls %}
 {% block object-tools-items %}
     <li>
         <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="historylink">{% trans "History" %}</a>
@@ -13,3 +15,5 @@
         </li>
     {% endif%}
 {% endblock %}
+{% load custom_submit_line %}
+{% block submit_buttons_bottom %}{% custom_submit_line %}{% endblock %}

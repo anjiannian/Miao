@@ -21,7 +21,7 @@ class VolunteerForm(ModelForm):
 
     class Meta:
         model = Volunteer
-        exclude = ('volunteer_type','user', 'status', 'evaluation', 'evaluate_time',
+        exclude = ('volunteer_type','user', 'status', 'evaluation', 'evaluate_time', 'eva_result',
                    'training_time', 'evaluation_of_training', 'homework', 'headshot',
                    'volunteer_type', 'level')
 

@@ -12,3 +12,7 @@ class CustomModelAdmin(admin.ModelAdmin):
                 [field.name for field in self.opts.local_many_to_many]
             ))
         return [field for field in result if field not in exclude_list]
+
+    @staticmethod
+    def has_view_permission(request, codename):
+        return request.user.has_perm("%s.%s" % ('volunteer', codename))
