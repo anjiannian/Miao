@@ -17,7 +17,7 @@ def custom_submit_line(context):
     is_popup = context['is_popup']
     save_as = context['save_as']
     # if user has view only permission than show none buttons
-    view_only_perm = curr_user.has_perm("%s.%s" % (str(opts).split(".")[0], "view_" + str(opts).split(".")[1]))
+    view_only_perm = curr_user.has_perm("%s.%s" % (str(opts).split(".")[0], "view_only_" + str(opts).split(".")[1]))
     ctx = {
         'opts': opts,
         'show_delete_link': (not is_popup and context['has_delete_permission']
@@ -31,6 +31,7 @@ def custom_submit_line(context):
         'preserved_filters': context.get('preserved_filters'),
         'view_only_perm': (view_only_perm and not curr_user.is_superuser)
     }
+
     if context.get('original') is not None:
         ctx['original'] = context['original']
     return ctx

@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_static %}
-
+{% load custom_permissions %}
 {% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
 
 {% block coltype %}colMS{% endblock %}
@@ -11,7 +11,7 @@
 
 {% block content %}
 <div id="content-main">
-
+a{% has_view_only_perm %}b
 {% if app_list %}
     {% for app in app_list %}
         <div class="app-{{ app.app_label }} module">

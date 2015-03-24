@@ -30,7 +30,7 @@ class School(BaseModelMixin):
         verbose_name = u"学校"
         verbose_name_plural = u"学校"
         permissions = (
-            ("view_school",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_school",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
@@ -91,7 +91,7 @@ class Volunteer(models.Model):
         verbose_name = u"志愿者"
         verbose_name_plural = u"志愿者"
         permissions = (
-            ("view_volunteer",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_volunteer",  u"可以查看%s相关信息" % verbose_name),
         )
     def __unicode__(self):
         return self.name
@@ -110,7 +110,7 @@ class VolunteerGroup(BaseModelMixin):
         verbose_name_plural = u"志愿者小组"
         db_table = "volunteer_group"
         permissions = (
-            ("view_volunteer_group",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_volunteer_group",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
@@ -141,7 +141,7 @@ class CheckIn(BaseModelMixin):
         verbose_name = u"签到"
         verbose_name_plural = u"签到"
         permissions = (
-            ("view_checkin",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_checkin",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
@@ -158,7 +158,7 @@ class Book(BaseModelMixin):
         verbose_name = u"书"
         verbose_name_plural = u"书"
         permissions = (
-            ("view_book",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_book",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
@@ -176,7 +176,7 @@ class Class(BaseModelMixin):
         verbose_name = u"班级"
         verbose_name_plural = u"班级"
         permissions = (
-            ("view_class",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_class",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
@@ -193,7 +193,7 @@ class Course(BaseModelMixin):
         verbose_name = u"课程"
         verbose_name_plural = u"课程"
         permissions = (
-            ("view_course",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_course",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
@@ -209,7 +209,7 @@ class EvaluationRule(BaseModelMixin):
         verbose_name = u"评价规则"
         verbose_name_plural = u"评价规则"
         permissions = (
-            ("view_evaluation_rule",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_evaluation_rule",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
@@ -224,7 +224,7 @@ class Evaluation(BaseModelMixin):
         verbose_name = u"评价"
         verbose_name_plural = u"评价"
         permissions = (
-            ("view_evaluation",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_evaluation",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
@@ -252,7 +252,7 @@ class Activity(models.Model):
         verbose_name = u"活动"
         verbose_name_plural = u"活动"
         permissions = (
-            ("view_activity",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_activity",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
