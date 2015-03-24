@@ -20,6 +20,7 @@ function innerGuide(obj){
 	else 
 		return false;
 }
+
 function outerGuide(){
 	document.getElementById("guide").innerHTML="<tr><td class='big_btn'><a id='about_btn' onmouseover='innerGuide(this)'>"+"关于苗苗阅读"+
 				"</a></td></tr>"+"<tr><td class='big_btn'><a id='join_btn' onmouseover='innerGuide(this)'>"+"加入我们"+
@@ -27,4 +28,8 @@ function outerGuide(){
 		return true;
 }
 
+//function slide(obj){
+//	if((obj.id=="about_btn")||(obj.id=="about_btn0"))
+//		
+//}
 

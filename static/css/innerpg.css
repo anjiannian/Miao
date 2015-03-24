@@ -2,11 +2,11 @@
 /* CSS Document */
 body{
 	margin:0px;
-	background-image:;
+	background-image:url(/static/imgs/tr.png);
 	background-color:#fff;
 	background-repeat:no-repeat;
 	background-attachment:fixed;
-	background-position:bottom;
+	background-position:left;
 	font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
 }
 #wrapper {
