@@ -2,17 +2,25 @@
 /* CSS Document */
 body{
 	margin:0px;
-	background-image:;
+	background-image:url(/static/imgs/tr.png);
 	background-color:#fff;
 	background-repeat:no-repeat;
 	background-attachment:fixed;
-	background-position:bottom;
+	background-position:bottom left;
 	font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
+#innerbd{
+	background-image:url(/static/imgs/min.png);
+	background-repeat:repeat-x;
+	background-attachment:fixed;
+	background-position:bottom left;	
 }
 #wrapper {
 	width:80%;
 	margin:auto;
 	background-color:;
+	background-image:url(/static/imgs/sbg.png);
+	background-repeat:repeat;
 }
 
 /* main components */
@@ -21,7 +29,7 @@ body{
 	height:160px;
 	margin-top:10px;
 	margin-bottom:10px;
-	background-color:;
+	background-color:#FFF;
 	background-image:;
 	background-repeat:repeat-x;
 	backgrount-position:bottom;
@@ -34,6 +42,8 @@ body{
 	margin-bottom:10px;
 	height:360px;
 	background-color:;
+	background-img:;
+	background-repeat:;
 	border-spacing:0px;
 }
 #news_win{
@@ -42,12 +52,13 @@ body{
 	margin-top:10px;
 	margin-bottom:10px;
 	height:360px;
-	background-color:#999;
+	background-color:;
 }
 #news_lst{
 	float:left;
 	width:100%;
-	background-color:;
+	background-image:url(/static/imgs/sbg.png);
+	background-repeat:repeat;
 }
 .clear{
 	clear:both;

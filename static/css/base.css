@@ -1,6 +1,189 @@
-#id_week_table{
-    margin-bottom: 16px;
+/*login*/
+form{
+	font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
 }
-#id_week_table a.hover{
-    background-color: #48dad0;
+.tip{
+	font-size:;
+	color:#C00;
+}
+#login_box{
+	width:360px;
+	margin:auto;
+	padding-left:100px;
+	padding-top:40px;
+	border:outset thin #369;
+	background-color:#FFE;
+	line-height:70px;
+	font-family:;
+}
+form label{
+	font-size:120%;
+}
+form .input{
+	height:24px;
+	width:200px;
+	margin-left:300px;
+}
+form .btn{
+	height:27px;
+	width:80px;
+	margin:10px;
+	background-color:#FFF;
+	border:outset thin;
+	font-family:;
+	font-size:18px;
+}
+form span{
+	font-size:16px;
+}
+
+/* FORM LABELS */
+form h4 {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+label {
+    font-weight: normal !important;
+    color: #666;
+    font-size: 11px;
+}
+.required label, label.required {
+    font-weight: bold !important;
+    color: #333 !important;
+}
+
+/*error msg*/
+.errorlist {
+	color:#c00;
+	font-size:90%;
+}
+
+/* ALIGNED FIELDSETS */
+
+.aligned label {
+    display: block;
+    padding: 3px 10px 0 0;
+    float: left;
+    width: 8em;
+    word-wrap: break-word;
+}
+
+.aligned ul label {
+    display: inline;
+    float: none;
+    width: auto;
+}
+
+.colMS .aligned .vLargeTextField, .colMS .aligned .vXMLLargeTextField {
+    width: 350px;
+}
+
+form .aligned p, form .aligned ul {
+    margin-left: 7em;
+    padding-left: 30px;
+}
+
+form .aligned table p {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+form .aligned p.help {
+    padding-left: 38px;
+}
+
+.aligned .vCheckboxLabel {
+    float: none !important;
+    display: inline;
+    padding-left: 4px;
+}
+
+.colM .aligned .vLargeTextField, .colM .aligned .vXMLLargeTextField {
+    width: 610px;
+}
+
+.checkbox-row p.help {
+    margin-left: 0;
+    padding-left: 0 !important;
+}
+
+fieldset .field-box {
+    float: left;
+    margin-right: 20px;
+}
+
+/* WIDE FIELDSETS */
+
+.wide label {
+    width: 15em !important;
+}
+
+form .wide p {
+    margin-left: 15em;
+}
+
+form .wide p.help {
+    padding-left: 38px;
+}
+
+.colM fieldset.wide .vLargeTextField, .colM fieldset.wide .vXMLLargeTextField {
+    width: 450px;
+}
+
+/* SUBMIT ROW */
+
+.submit-row {
+    padding: 0px 30px;
+    text-align: right;
+    background-image:url(/static/imgs/sbg.png);
+    background-repeat:repeat;
+    border: 1px solid #ccc;
+    margin: 5px 0;
+    overflow: hidden;
+}
+
+body.popup .submit-row {
+    overflow: auto;
+}
+
+.submit-row input {
+    height:27px;
+	width:80px;
+	margin:10px;
+	background-color:#FFF;
+	border:outset thin;
+	font-family:;
+	font-size:18px;
+}
+
+.submit-row p {
+    margin: 0.3em;
+}
+
+.submit-row p.deletelink-box {
+    float: left;
+}
+
+.submit-row .deletelink {
+    background: url(../img/icon_deletelink.gif) 0 50% no-repeat;
+    padding-left: 14px;
+}
+
+/* FORM ROWS */
+
+.form-row {
+    overflow: hidden;
+    padding: 8px 12px;
+    font-size: 11px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-row img, .form-row input {
+    vertical-align: middle;
+}
+
+form .form-row p {
+    padding-left: 0;
+    font-size: 11px;
 }

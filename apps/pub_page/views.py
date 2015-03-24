@@ -11,6 +11,13 @@ def news(request):
     return render(request, 'pub_page/news.html')
 def articles(request):
     return render(request, 'pub_page/articles.html')
+
+def feelings(request):
+    return render(request, 'pub_page/feelings.html')
+def train_classes(request):
+    return render(request, 'pub_page/train_classes.html')
+
+
 #
 #def content_lists(request):
 #    return

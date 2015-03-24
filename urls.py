@@ -10,6 +10,8 @@ urlpatterns = patterns('apps.pub_page.views',
     url(r'^intro/$', 'intro'),
     url(r'^news/$', 'news'),
     url(r'^articles/$', 'articles'),
+    url(r'^feelings/$', 'feelings'),
+    url(r'^train_classes/$', 'train_classes'),
 )
 
 urlpatterns += patterns('apps.volunteer.views',
