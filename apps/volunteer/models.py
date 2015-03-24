@@ -29,6 +29,9 @@ class School(BaseModelMixin):
     class Meta:
         verbose_name = u"学校"
         verbose_name_plural = u"学校"
+        permissions = (
+            ("view_school",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return self.school_name
@@ -69,15 +72,16 @@ class Volunteer(models.Model):
     headshot = models.FileField(u"大头照", upload_to="headshot/", null=True, blank=True)
     #=============================================================
     # 志愿者审核阶段
-    evaluation = models.TextField(u"审核结果", null=True, blank=True)
-    evaluate_time = models.TimeField(u'审核时间', null=True, blank=True)
+    evaluation = models.TextField(u"审核评价", null=True, blank=True)
+    eva_result = models.CharField(u"审核是否通过", choices=YES_NO, default=0, max_length=1)
+    evaluate_time = models.DateTimeField(u'审核时间', null=True, blank=True)
     #=============================================================
     # 培训活动
-    training_time = models.TimeField(u'培训时间', null=True, blank=True)
+    training_time = models.DateTimeField(u'培训时间', null=True, blank=True)
     evaluation_of_training = models.TextField(u"培训评价", null=True, blank=True)
     #=============================================================
     # 作业
-    homework = models.FileField(u"文件名称", upload_to="homework/", null=True, blank=True)
+    homework = models.FileField(u"作业文件", upload_to="homework/", null=True, blank=True)
 
     free_time = models.TextField(u"空闲时间", null=True, blank=True)
 
@@ -87,9 +91,8 @@ class Volunteer(models.Model):
         verbose_name = u"志愿者"
         verbose_name_plural = u"志愿者"
         permissions = (
-            ("view_volunteer", "Can see available volunteers"),
+            ("view_volunteer",  u"可以查看%s相关信息" % verbose_name),
         )
-
     def __unicode__(self):
         return self.name
 
@@ -100,12 +103,15 @@ class VolunteerGroup(BaseModelMixin):
     group_leader = models.ForeignKey(to=Volunteer, verbose_name="组长", related_name="group_leader")
     effective_year = models.CharField(u"有效期--年", max_length=4, choices=YEARS)
     effective_season = models.CharField(u"有效期--季度", max_length=1, choices=SEASON)
-    volunteers = models.ManyToManyField(Volunteer)
+    volunteers = models.ManyToManyField(Volunteer, related_name="volunteer_groups")
 
     class Meta:
         verbose_name = u"志愿者小组"
         verbose_name_plural = u"志愿者小组"
         db_table = "volunteer_group"
+        permissions = (
+            ("view_volunteer_group",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return self.group_name
@@ -116,6 +122,17 @@ class VolunteerGroup(BaseModelMixin):
             raise ValidationError(u"志愿者%s不能被选为组长！" % self.group_leader.name)
 
 
+class OperatorRegion(BaseModelMixin):
+    operator = models.ForeignKey(to=Volunteer, verbose_name="运营管理员", related_name="operator_region")
+    schools = models.ManyToManyField(School, related_name="schools_in_region")
+
+    class Meta:
+        verbose_name = u"运营管理范围"
+        verbose_name_plural = u"运营管理范围"
+
+    def __unicode__(self):
+        return self.operator.name
+
 class CheckIn(BaseModelMixin):
     volunteer = models.ForeignKey(Volunteer, related_name="volunteers", verbose_name="志愿者")
     check_in_date = models.DateTimeField(u"签到时间", null=True, blank=True)
@@ -123,6 +140,9 @@ class CheckIn(BaseModelMixin):
     class Meta:
         verbose_name = u"签到"
         verbose_name_plural = u"签到"
+        permissions = (
+            ("view_checkin",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return unicode(self.volunteer)
@@ -137,6 +157,9 @@ class Book(BaseModelMixin):
     class Meta:
         verbose_name = u"书"
         verbose_name_plural = u"书"
+        permissions = (
+            ("view_book",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return self.name
@@ -152,6 +175,9 @@ class Class(BaseModelMixin):
     class Meta:
         verbose_name = u"班级"
         verbose_name_plural = u"班级"
+        permissions = (
+            ("view_class",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return u"%s年级 %s班" % (self.grade, self.class_name)
@@ -166,6 +192,9 @@ class Course(BaseModelMixin):
     class Meta:
         verbose_name = u"课程"
         verbose_name_plural = u"课程"
+        permissions = (
+            ("view_course",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return self.name
@@ -179,6 +208,9 @@ class EvaluationRule(BaseModelMixin):
     class Meta:
         verbose_name = u"评价规则"
         verbose_name_plural = u"评价规则"
+        permissions = (
+            ("view_evaluation_rule",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return self.item
@@ -191,6 +223,9 @@ class Evaluation(BaseModelMixin):
     class Meta:
         verbose_name = u"评价"
         verbose_name_plural = u"评价"
+        permissions = (
+            ("view_evaluation",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return "%s: %s" % (self.evaluation_rule.item, self.evaluation_value)
@@ -216,6 +251,9 @@ class Activity(models.Model):
     class Meta:
         verbose_name = u"活动"
         verbose_name_plural = u"活动"
+        permissions = (
+            ("view_activity",  u"可以查看%s相关信息" % verbose_name),
+        )
 
     def __unicode__(self):
         return u"活动"

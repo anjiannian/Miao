@@ -1,6 +1,9 @@
 # -*- encoding:utf-8 -*-
 
-
+YES_NO = (
+    (0, u"否"),
+    (1, u"是"),
+)
 SEX_CHOICE = (
     ("M", u"男"),
     ("F", u"女")
