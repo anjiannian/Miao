@@ -73,7 +73,7 @@ class Volunteer(models.Model):
     #=============================================================
     # 志愿者审核阶段
     evaluation = models.TextField(u"审核评价", null=True, blank=True)
-    eva_result = models.CharField(u"审核是否通过", choices=YES_NO, default=0, max_length=1)
+    eva_result = models.CharField(u"审核是否通过", choices=YES_NO, default='0', max_length=1)
     evaluate_time = models.DateTimeField(u'审核时间', null=True, blank=True)
     #=============================================================
     # 培训活动
@@ -258,3 +258,17 @@ class Activity(models.Model):
     def __unicode__(self):
         return u"活动"
 
+
+class AskForLeave(models.Model):
+    id = models.AutoField(u"id", primary_key=True)
+    volunteer = models.ForeignKey(Volunteer)
+    activity = models.ForeignKey(Activity, u"请假活动")
+    created_at = models.DateTimeField(u"请假时间", auto_created=True)
+    status = models.CharField(u"状态", choices=ASK_FOR_LEAVE_STATUS, default='0')
+
+    class Meta:
+        verbose_name = u"请假"
+        verbose_name_plural = u"请假"
+
+    def __unicode__(self):
+        return u"%s请假" % self.volunteer

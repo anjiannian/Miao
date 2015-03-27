@@ -7,7 +7,7 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def has_view_only_perm(context):
     curr_user = context["user"]
-    if curr_user.is_superuser:
+    if curr_user.is_superuser or not context.get('app_label', None):
         return False
     view_only_perm = False
     app_label = context["app_label"]

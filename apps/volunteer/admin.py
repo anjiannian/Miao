@@ -1,11 +1,11 @@
 #-*- coding: UTF-8 -*-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from custom_model_admin import CustomModelAdmin
-from apps.volunteer import models
+from apps.volunteer import models, choice
 import db_utils
 
 
@@ -74,9 +74,11 @@ class VolunteersAdmin(CustomModelAdmin):
             group_members = models.VolunteerGroup.objects.filter(
                 group_leader_id=vol_info.id,
                 status=1
-            )[0]
-
-            return group_members.volunteers
+            )
+            if group_members:
+                return group_members[0].volunteers
+            else:
+                return models.Volunteer.objects.none()
         elif vol_info.level == '03':
             # operator 所有未审核的 和 自己所管辖下的所有志愿者
             un_evaluate_vol = models.Volunteer.objects.filter(status='10')
@@ -85,21 +87,23 @@ class VolunteersAdmin(CustomModelAdmin):
 
         return qs
 
-    # def get_form(self, request, obj=None, **kwargs):
-    #     form = super(VolunteersAdmin, self).get_form(request, obj=None, **kwargs)
-    #
-    #     if not request.user.is_superuser:
-    #         vol_info = models.Volunteer.objects.get(user_id=request.user.id)
-    #         if vol_info.level == '01':   # normal volunteer
-    #             pass
-    #         elif vol_info.level == '02':   # group leader
-    #             self.exclude = ("level", "volunteer_type", "evaluation",
-    #                             "evaluate_time", "training_time", "evaluation_of_training",
-    #                             "homework", "free_time", )
-    #         elif vol_info.level == '03':  # group master
-    #             # self.readonly_fields = ("level",)
-    #             pass
-    #     return form
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(VolunteersAdmin, self).get_form(request, obj=None, **kwargs)
+        if not request.user.is_superuser:
+            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+            # if vol_info.level == '01':   # normal volunteer
+            #     pass
+            # elif vol_info.level == '02':   # group leader
+            #     self.exclude = ("level", "volunteer_type", "evaluation",
+            #                     "evaluate_time", "training_time", "evaluation_of_training",
+            #                     "homework", "free_time", )
+            if vol_info.level == '03':  # group master
+                form.base_fields["level"].choices = (
+                    choice.VOLUNTEER_LEVEL[0], choice.VOLUNTEER_LEVEL[1]
+                )
+        else:
+            form.base_fields["level"].choices = choice.VOLUNTEER_LEVEL
+        return form
 
     fieldsets = (
         (u'名称', {
@@ -126,26 +130,76 @@ class VolunteersAdmin(CustomModelAdmin):
             'classes': ('collapse ',)
         }),
         (None, {
-            'fields': ('status', )
+            'fields': ('status', 'level')
         })
     )
+
+    group_leader_fieldsets = (fieldsets[0], fieldsets[1], fieldsets[5])
+
     def get_fieldsets(self, request, obj=None):
-        fieldsets = self.fieldsets
         if not request.user.is_superuser:
             vol_info = models.Volunteer.objects.get(user_id=request.user.id)
             if vol_info.level == '02':   # group leader
-                fieldsets = (fieldsets[0], fieldsets[1], fieldsets[5])
-                fields = []
-                for s in fieldsets:
-                    for f in s[1]["fields"]:
-                        fields.append(f)
-                self.readonly_fields = tuple(fields)
-            elif vol_info.level == '03':
-                pass
+                fieldsets = self.group_leader_fieldsets
+            else:   # 03
+                fieldsets = self.fieldsets
+        else:
+            fieldsets = [(None, {'fields': self.get_fields(request, obj)})]
 
         return fieldsets
 
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = super(CustomModelAdmin, self).get_readonly_fields(request, obj)
+        if not request.user.is_superuser:
+            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+            if vol_info.level == '02':   # group leader
+                fields = []
+                for s in self.group_leader_fieldsets:
+                    for f in s[1]["fields"]:
+                        fields.append(f)
+                readonly_fields = tuple(fields)
+            elif vol_info.level == '03':
+                readonly_fields = (None,)
+
+        return readonly_fields
+
+
     list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            # update obj
+            obj_old = self.model.objects.get(pk=obj.pk)
+            modify_user = User.objects.get(id=obj.user_id)
+            if obj_old.level != obj.level:
+                if obj.level in ['03', '02']:   # operator/ group leader
+                    modify_user.is_staff = True    # weather this user can access the admin site
+                    modify_user.groups.clear()
+                    # add user to operator's/ group leader's group
+                    if obj.level == '03':
+                        new_group = Group.objects.get(name=u"运营")
+                    else:
+                        new_group = Group.objects.get(name=u"组长")
+
+                    modify_user.groups.add(new_group)
+                elif obj.level == '04':  # admin
+                    modify_user.is_staff = True    # weather this user can access the admin site
+                    modify_user.is_superuser = True
+                else:   # 01 normal vol
+                    modify_user.is_staff = True    # weather this user can access the admin site
+                    modify_user.groups.clear()
+            if obj_old.eva_result != obj.eva_result:
+                if obj.eva_result == '0':
+                    modify_user.status = '20'
+                else:
+                    modify_user.status = '10'
+            if obj_old.evaluation_of_training and modify_user.status >= '20':
+                modify_user.status = '21'
+            # todo next modify status
+
+            modify_user.save()
+
+            super(VolunteersAdmin, self).save_model(request, obj, form, change)
 admin.site.register(models.Volunteer, VolunteersAdmin)
 
 
