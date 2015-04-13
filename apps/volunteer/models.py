@@ -100,7 +100,7 @@ class Volunteer(models.Model):
 class VolunteerGroup(BaseModelMixin):
     group_name = models.CharField(u"小组名称", max_length=50, unique=True)
     school_for_work = models.ForeignKey(to=School, verbose_name="服务学校")
-    group_leader = models.ForeignKey(to=Volunteer, verbose_name="组长", related_name="group_leader")
+    group_leader = models.ForeignKey(Volunteer, verbose_name="组长", related_name="group_leader")
     effective_year = models.CharField(u"有效期--年", max_length=4, choices=YEARS)
     effective_season = models.CharField(u"有效期--季度", max_length=1, choices=SEASON)
     volunteers = models.ManyToManyField(Volunteer, related_name="volunteer_groups")
@@ -180,13 +180,13 @@ class Class(BaseModelMixin):
         )
 
     def __unicode__(self):
-        return u"%s年级 %s班" % (self.grade, self.class_name)
+        return u"%s:%s年级 %s班" % (self.school, self.grade, self.class_name)
 
 
 class Course(BaseModelMixin):
     name = models.CharField(u"课程名称", max_length=50)
     book = models.ForeignKey(Book, verbose_name="书")
-    designer = models.ForeignKey(Volunteer, verbose_name="课程设计者")
+    designer = models.CharField(u"课程设计者", max_length=50, null=True, blank=True)
     description = models.TextField(u"描述", null=True, blank=True)
 
     class Meta:
@@ -231,40 +231,57 @@ class Evaluation(BaseModelMixin):
         return "%s: %s" % (self.evaluation_rule.item, self.evaluation_value)
 
 
-class Activity(models.Model):
+class ActivityPublish(models.Model):
     activity_name = models.CharField(u"名称", max_length=100)
-    created_at = models.DateTimeField(u"时间", null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+    created_at = models.DateTimeField(u"创建时间", null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(u"更新时间", null=True, blank=True, auto_now=True)
+    group_leader = models.ForeignKey(Volunteer, verbose_name="组长", related_name="activity_group_leader")
     course = models.ForeignKey(Course, verbose_name="课程")
     class_id = models.ForeignKey(Class, verbose_name="班级")
-    volunteer = models.ManyToManyField(Volunteer, related_name="volunteer", verbose_name="志愿者")
-    assistant = models.ForeignKey(Volunteer, related_name="assistant", verbose_name="助教")
-    class_time = models.DateTimeField(u"上课时间", null=True, blank=True)
+    class_time = models.CharField(u"上课时间", max_length=50, null=True, blank=True)
+    activity_type = models.IntegerField(u"活动形式", default=0, choices=ACTIVITY_TYPE)
     status = models.IntegerField(u"状态", default="0", choices=COURSE_STATUS)
-    class_evaluation = models.ManyToManyField(Evaluation, verbose_name="评价", null=True, blank=True)
-
-    address = models.CharField(u"地址", max_length=100, null=True, blank=True)
-
-    activity_type = models.IntegerField(u"活动类型", default=0, choices=ACTIVITY_TYPE)
-    # 0-deleted, 1-normal, ...
+    apply_volunteers = models.ManyToManyField(Volunteer, u"申请的志愿者", related_name="apply_volunteers")
+    apply_volunteers2 = models.ManyToManyField(Volunteer, u"第二申请的志愿者", related_name="apply_volunteers2")
+    confirm_volunteers = models.ManyToManyField(Volunteer, u"确认的志愿者", related_name="confirm_volunteers")
 
     class Meta:
         verbose_name = u"活动"
         verbose_name_plural = u"活动"
         permissions = (
-            ("view_only_activity",  u"可以查看%s相关信息" % verbose_name),
+            ("view_only_activity_publish",  u"可以查看%s相关信息" % verbose_name),
         )
 
     def __unicode__(self):
-        return u"活动"
+        return self.activity_name
 
+
+class ActivityDetail(models.Model):
+    #todo test activity
+    activity = models.ForeignKey(ActivityPublish, verbose_name="活动主题")
+    activity_time = models.DateTimeField(u"上课时间", null=True, blank=True)
+    speaker = models.ForeignKey(Volunteer, verbose_name="主讲", related_name="speakser")
+    assistant = models.ForeignKey(Volunteer, verbose_name="助理", related_name="assistant", null=True, blank=True)
+    assistant_2_speaker = models.TextField(u"助理评主讲", null=True, blank=True)
+    speaker_self = models.TextField(u"主讲自评", null=True, blank=True)
+    meta = models.TextField(u"其它信息", null=True, blank=True)
+
+    class Meta:
+        verbose_name = u"活动详情"
+        verbose_name_plural = u"活动详情"
+        permissions = (
+            ("view_only_activity_detail",  u"可以查看%s相关信息" % verbose_name),
+        )
+
+    def __unicode__(self):
+        return self.activity_name
 
 class AskForLeave(models.Model):
     id = models.AutoField(u"id", primary_key=True)
     volunteer = models.ForeignKey(Volunteer)
-    activity = models.ForeignKey(Activity, u"请假活动")
+    activity = models.ForeignKey(ActivityDetail, verbose_name=u"请假活动")
     created_at = models.DateTimeField(u"请假时间", auto_created=True)
-    status = models.CharField(u"状态", choices=ASK_FOR_LEAVE_STATUS, default='0')
+    status = models.CharField(u"状态", max_length=1, choices=ASK_FOR_LEAVE_STATUS, default='0')
 
     class Meta:
         verbose_name = u"请假"

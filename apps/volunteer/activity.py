@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 
 from forms import ActivityForm
-from models import Activity, VOLUNTEER_STATUS, Volunteer
+from models import ActivityPublish, VOLUNTEER_STATUS, Volunteer
 from settings import LOGIN_URL
 import utils
 
@@ -21,7 +21,7 @@ VOLUNTEER_STATUS_DICT = utils.model_choice_2_dict(VOLUNTEER_STATUS)
 def list_activity(request):
     data = {}
     template_name = "activity_list.html"
-    activities = Activity.objects.all()
+    activities = ActivityPublish.objects.all()
     act_form = ActivityForm()
 
     if not request.user.is_anonymous():

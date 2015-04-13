@@ -60,6 +60,7 @@ admin.site.register(User, SelfUserAdmin)
 # ==================================================================
 # =======================self admin=================================
 class VolunteersAdmin(CustomModelAdmin):
+    list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
 
     def get_queryset(self, request):
         qs = super(CustomModelAdmin, self).get_queryset(request)
@@ -163,9 +164,6 @@ class VolunteersAdmin(CustomModelAdmin):
 
         return readonly_fields
 
-
-    list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
-
     def save_model(self, request, obj, form, change):
         if change:
             # update obj
@@ -239,7 +237,7 @@ admin.site.register(models.Class, ClassesAdmin)
 
 
 class CoursesAdmin(CustomModelAdmin):
-    list_display = ["name"]
+    list_display = ["name", "book"]
 admin.site.register(models.Course, CoursesAdmin)
 
 
@@ -248,9 +246,15 @@ class SchoolAdmin(CustomModelAdmin):
 admin.site.register(models.School, SchoolAdmin)
 
 
-class ActivityAdmin(CustomModelAdmin):
-    list_display = ["activity_name", "course", "class_id", "activity_type", "status"]
-admin.site.register(models.Activity, ActivityAdmin)
+class ActivityPublishAdmin(CustomModelAdmin):
+    # filter_horizontal = ("volunteer", )
+    list_display = ["activity_name", "group_leader", "course", "class_id", "activity_type", "status"]
+admin.site.register(models.ActivityPublish, ActivityPublishAdmin)
+
+
+class ActivityDetailAdmin(CustomModelAdmin):
+    list_display = ["activity", "activity_time", "speaker", "assistant"]
+admin.site.register(models.ActivityDetail, ActivityDetailAdmin)
 
 
 class CheckInAdmin(CustomModelAdmin):

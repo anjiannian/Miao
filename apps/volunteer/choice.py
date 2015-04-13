@@ -38,8 +38,8 @@ EVALUATION = (
 
 COURSE_STATUS = (
     (0, u"未开始"),
-    (1, u"未评估"),
-    (2, u"已评估"),
+    (1, u"已发布"),
+    (2, u"已实施"),
 )
 
 ACTIVITY_TYPE = (

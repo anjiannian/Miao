@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 
-from models import Volunteer, Activity
+from models import Volunteer, ActivityPublish
 from utils import _
 
 
@@ -97,7 +97,7 @@ class ActivityForm(ModelForm):
         # self.fields["why_in"].help_text = "请至少写3点"
 
     class Meta:
-        model = Activity
+        model = ActivityPublish
         # exclude = ('user', 'status')
 
 
