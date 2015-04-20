@@ -241,9 +241,12 @@ class ActivityPublish(models.Model):
     class_time = models.CharField(u"上课时间", max_length=50, null=True, blank=True)
     activity_type = models.IntegerField(u"活动形式", default=0, choices=ACTIVITY_TYPE)
     status = models.IntegerField(u"状态", default="0", choices=COURSE_STATUS)
-    apply_volunteers = models.ManyToManyField(Volunteer, u"申请的志愿者", related_name="apply_volunteers")
-    apply_volunteers2 = models.ManyToManyField(Volunteer, u"第二申请的志愿者", related_name="apply_volunteers2")
-    confirm_volunteers = models.ManyToManyField(Volunteer, u"确认的志愿者", related_name="confirm_volunteers")
+    apply_volunteers = models.ManyToManyField(
+        Volunteer, verbose_name=u"第一志愿", related_name="apply_volunteers", null=True, blank=True)
+    apply_volunteers2 = models.ManyToManyField(
+        Volunteer, verbose_name=u"第二志愿", related_name="apply_volunteers2", null=True, blank=True)
+    confirm_volunteers = models.ManyToManyField(
+        Volunteer, verbose_name=u"确认志愿者", related_name="confirm_volunteers", null=True, blank=True)
 
     class Meta:
         verbose_name = u"活动"

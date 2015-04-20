@@ -1,7 +1,11 @@
 #-*- coding: UTF-8 -*-
 from django.contrib import admin
+from django.contrib import messages
+from django.http.response import HttpResponseRedirect
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User, Group
+from django.utils.encoding import force_text
+from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from custom_model_admin import CustomModelAdmin
@@ -247,7 +251,23 @@ admin.site.register(models.School, SchoolAdmin)
 
 
 class ActivityPublishAdmin(CustomModelAdmin):
-    # filter_horizontal = ("volunteer", )
+
+    def response_change(self, request, obj):
+        if "_continue" in request.POST:
+            # when user click the '_continue' button which is confirm button in this model
+            if obj.status == 1:
+                obj.status = 2
+                obj.save()
+
+        return super(ActivityPublishAdmin, self).response_change(request, obj)
+
+
+    def save_model(self, request, obj, form, change):
+        obj.status = 1
+        super(ActivityPublishAdmin, self).save_model(request, obj, form, change)
+
+    filter_horizontal = ("apply_volunteers", "apply_volunteers2")
+    readonly_fields = ("status", "confirm_volunteers", )
     list_display = ["activity_name", "group_leader", "course", "class_id", "activity_type", "status"]
 admin.site.register(models.ActivityPublish, ActivityPublishAdmin)
 
