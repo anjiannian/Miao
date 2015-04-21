@@ -90,15 +90,14 @@ class CreationUserForm(forms.Form):
         return password2
 
 
-class ActivityForm(ModelForm):
+class ActivityPublicForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(ActivityForm, self).__init__(*args, **kwargs)
-        # self.fields["why_in"].help_text = "请至少写3点"
+        super(ActivityPublicForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = ActivityPublish
-        # exclude = ('user', 'status')
+        exclude = ('updated_at', 'apply_volunteers', 'apply_volunteers2', 'confirm_volunteers')
 
 
 class UploadHomework(forms.Form):

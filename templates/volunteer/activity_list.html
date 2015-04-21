@@ -7,30 +7,23 @@
 {% block body %}
 
     <h1>活动列表</h1>
-    <div >
-        {% for act in activities %}
-            <ul style="border:solid 1px red" >
-                <li>
-                    {{ act.activity_name }}
-                </li>
-                <li>
-                    {{ act.cource }}
-                </li>
-                <li>
-                    {{ act.assistant }}
-                </li>
-                <li>
-                    {{ act.address }}
-                </li>
-            </ul>
-            <div>
-                {% if volunteer_status == 1 %}
-                    {# 如果是志愿者则能进行申请 #}
+    <div>
+        <ul>{% for act in activities %}
+            <li>{{ act.activity_name }}</li>
+            <li>{{ act.created_at }}</li>
+            <li>{{ act.group_leader }}</li>
+            <li>{{ act.course }}</li>
+            <li>{{ act.class_time }}</li>
+            <li>{{ act.activity_type }}</li>
+            <li>{{ act.status }}</li>
+            <li>{% if act.status == 1 %}
+                <div>
                     <a href="/activity/apply/first/{{ user.id }}/">第一志愿申请</a>
                     <a href="/activity/apply/second/{{ user.id }}/">第二志愿申请</a>
-                {% endif %}
-            </div>
-        {% endfor %}
+                </div>
+            {% endif %}</li>
+            #todo next
+        {% endfor %}</ul>
     </div>
 
 

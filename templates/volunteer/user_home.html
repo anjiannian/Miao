@@ -26,9 +26,9 @@
         {#                </div>#}
         {#            </fieldset>#}
         {#        </form>#}
-        {% if volunteer_status == 0 %}
+        {% if volunteer_status < '31' %}
             <a href="/volunteer/status/{{ user.id }}/">志愿者状态查询 </a>
-        {% elif volunteer_status == 1 %}
+        {% elif volunteer_status >= '31' %}
             <ul>
                 <li>
                     <a href="/volunteer/apply/{{ user.id }}/">志愿者信息修改</a>

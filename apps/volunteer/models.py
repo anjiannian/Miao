@@ -233,7 +233,7 @@ class Evaluation(BaseModelMixin):
 
 class ActivityPublish(models.Model):
     activity_name = models.CharField(u"名称", max_length=100)
-    created_at = models.DateTimeField(u"创建时间", null=True, blank=True, auto_now_add=True)
+    created_at = models.DateTimeField(u"发布时间", null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(u"更新时间", null=True, blank=True, auto_now=True)
     group_leader = models.ForeignKey(Volunteer, verbose_name="组长", related_name="activity_group_leader")
     course = models.ForeignKey(Course, verbose_name="课程")
