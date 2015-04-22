@@ -8,7 +8,8 @@
 
     <h1>活动列表</h1>
     <div>
-        <ul>{% for act in activities %}
+        <ul>
+        {% for act in activities %}
             <li>{{ act.activity_name }}</li>
             <li>{{ act.created_at }}</li>
             <li>{{ act.group_leader }}</li>
@@ -18,12 +19,14 @@
             <li>{{ act.status }}</li>
             <li>{% if act.status == 1 %}
                 <div>
-                    <a href="/activity/apply/first/{{ user.id }}/">第一志愿申请</a>
-                    <a href="/activity/apply/second/{{ user.id }}/">第二志愿申请</a>
+                    <a href="/activity/apply/first/{{ user.id }}/{{ act.id }}/">第一志愿申请</a>
+                    <a href="/activity/cancel/first/{{ user.id }}/{{ act.id }}/">第一志愿撤销</a>
+                    <a href="/activity/apply/second/{{ user.id }}/{{ act.id }}/">第二志愿申请</a>
+                    <a href="/activity/cancel/first/{{ user.id }}/{{ act.id }}/">第二志愿撤销</a>
                 </div>
             {% endif %}</li>
-            #todo next
-        {% endfor %}</ul>
+        {% endfor %}
+        </ul>
     </div>
 
 

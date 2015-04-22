@@ -37,7 +37,8 @@ urlpatterns += patterns('apps.volunteer.volunteer',
 from django.conf.urls.static import static
 urlpatterns += patterns('apps.volunteer.activity',
     url(r'^activity/list/$', 'list_activity'),
-    url(r'^activity/apply/(?P<choice>.*)/(?P<user_id>.*)/$', 'application'),
+    url(r'^activity/apply/(?P<choice>.*)/(?P<user_id>.*)/(?P<activity_id>.*)/$', 'application'),
+    url(r'^activity/cancel/(?P<choice>.*)/(?P<user_id>.*)/(?P<activity_id>.*)/$', 'cancel_application'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += patterns(

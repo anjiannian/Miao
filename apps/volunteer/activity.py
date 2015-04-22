@@ -36,7 +36,57 @@ def list_activity(request):
 
 @csrf_protect
 @login_required(login_url=LOGIN_URL)
-def application(request, choice, user_id):
-    template_name = "activity_list.html"
+def application(request, choice, user_id, activity_id):
+    if str(request.user.id) != user_id:
+        message = "不合法申请用户。"
+    else:
+        vol = Volunteer.objects.get(user=user_id)
+        selected_activity = ActivityPublish.objects.filter(id=activity_id, status=1)
+        if not selected_activity:
+            message = "无法申请该活动。"
+        else:
+            selected_activity = selected_activity[0]
+            if choice == 'first':
+                if vol in selected_activity.apply_volunteers.all():
+                    message = "您已在该活动的第一志愿列表中。"
+                else:
+                    selected_activity.apply_volunteers.add(vol)
+                    message = "第一志愿申请成功"
+            else:    # second
+                if vol in selected_activity.apply_volunteers2.all():
+                    message = "您已在该活动的第二志愿列表中。"
+                else:
+                    selected_activity.apply_volunteers2.add(vol)
+                    message = "第二志愿申请成功"
+            selected_activity.save()
 
-    return render_to_response(template_name, {}, context_instance=RequestContext(request))
+    return HttpResponseRedirect("/activity/list/?message=%s" % message)
+
+
+@csrf_protect
+@login_required(login_url=LOGIN_URL)
+def cancel_application(request, choice, user_id, activity_id):
+    if str(request.user.id) != user_id:
+        message = "不合法申请用户。"
+    else:
+        vol = Volunteer.objects.get(user=user_id)
+        selected_activity = ActivityPublish.objects.filter(id=activity_id, status=1)
+        if not selected_activity:
+            message = "无法撤销该活动。"
+        else:
+            selected_activity = selected_activity[0]
+            if choice == 'first':
+                if vol not in selected_activity.apply_volunteers.all():
+                    message = "您不在该活动的第一志愿列表中，无法撤销。"
+                else:
+                    selected_activity.apply_volunteers.remove(vol)
+                    message = "第一志愿撤销成功"
+            else:    # second
+                if vol not in selected_activity.apply_volunteers2.all():
+                    message = "您不在该活动的第二志愿列表中， 无法撤销"
+                else:
+                    selected_activity.apply_volunteers2.remove(vol)
+                    message = "第二志愿撤销成功"
+            selected_activity.save()
+
+    return HttpResponseRedirect("/activity/list/?message=%s" % message)
