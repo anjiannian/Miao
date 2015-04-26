@@ -260,7 +260,6 @@ class ActivityPublishAdmin(CustomModelAdmin):
     #             (obj.apply_volunteers.all() | obj.apply_volunteers2.all()).distinct()
     #
     #     return form
-
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             # when user click the '_continue' button which is confirm button in this model
