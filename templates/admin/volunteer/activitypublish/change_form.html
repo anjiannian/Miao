@@ -3,6 +3,13 @@
 {% load url from future %}
 {% load custom_permissions %}
 {% load admin_urls %}
+
+{% block field_sets %}
+{% for fieldset in adminform %}
+  {% include "admin/volunteer/activitypublish/activity_fieldset.html" %}
+{% endfor %}
+{% endblock %}
+
 {% block object-tools-items %}
     {% if has_view_only_perm %}
         <li>
@@ -18,4 +25,4 @@
     {% endif %}
 {% endblock %}
 {% load custom_submit_line %}
-{% block submit_buttons_bottom %}{% activity_submit_line %}{% endblock %}
+{% block submit_buttons_bottom %}{% activity_submit_line_confirm %}{% endblock %}

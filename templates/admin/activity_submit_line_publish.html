@@ -2,7 +2,6 @@
 {% if not view_only_perm %}
     <div class="submit-row">
         {% if show_save %}<input type="submit" value="活动发布" class="default" name="_save"/>{% endif %}
-        {% if show_confirm %}<input type="submit" value="活动最终实施" class="default" name="_continue"/>{% endif %}
         {% if show_delete_link %}
             {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
             <p class="deletelink-box">

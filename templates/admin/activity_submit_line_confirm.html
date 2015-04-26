@@ -1,0 +1,6 @@
+{% load i18n admin_urls %}
+{% if not view_only_perm %}
+    <div class="submit-row">
+        {% if show_confirm %}<input type="submit" value="活动最终确认" class="default" name="_continue"/>{% endif %}
+    </div>
+{% endif %}

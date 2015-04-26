@@ -252,6 +252,15 @@ admin.site.register(models.School, SchoolAdmin)
 
 class ActivityPublishAdmin(CustomModelAdmin):
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ActivityPublishAdmin, self).get_form(request, obj=None, **kwargs)
+        # 仅有申请第一/第二志愿的志愿者才能被选中
+        # if obj:
+        #     form.base_fields["confirm_volunteers"].queryset = \
+        #         (obj.apply_volunteers.all() | obj.apply_volunteers2.all()).distinct()
+
+        return form
+
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             # when user click the '_continue' button which is confirm button in this model
@@ -266,8 +275,8 @@ class ActivityPublishAdmin(CustomModelAdmin):
         obj.status = 1
         super(ActivityPublishAdmin, self).save_model(request, obj, form, change)
 
-    filter_horizontal = ("apply_volunteers", "apply_volunteers2")
-    readonly_fields = ("status", "confirm_volunteers", )
+    filter_horizontal = ("confirm_volunteers", )
+    readonly_fields = ("status", "apply_volunteers", "apply_volunteers2")
     list_display = ["activity_name", "group_leader", "course", "class_id", "activity_type", "status"]
 admin.site.register(models.ActivityPublish, ActivityPublishAdmin)
 
