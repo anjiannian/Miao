@@ -37,10 +37,11 @@ def list_activity(request):
 @csrf_protect
 @login_required(login_url=LOGIN_URL)
 def application(request, choice, user_id, activity_id):
-    if str(request.user.id) != user_id:
+    vol = Volunteer.objects.filter(user=user_id, status__gte='30')
+    if str(request.user.id) != user_id or not vol:
         message = "不合法申请用户。"
     else:
-        vol = Volunteer.objects.get(user=user_id)
+        vol = vol[0]
         selected_activity = ActivityPublish.objects.filter(id=activity_id, status=1)
         if not selected_activity:
             message = "无法申请该活动。"
@@ -58,6 +59,8 @@ def application(request, choice, user_id, activity_id):
                 else:
                     selected_activity.apply_volunteers2.add(vol)
                     message = "第二志愿申请成功"
+            #  成为活跃志愿者
+            vol.status = '31'
             selected_activity.save()
 
     return HttpResponseRedirect("/activity/list/?message=%s" % message)
@@ -66,10 +69,11 @@ def application(request, choice, user_id, activity_id):
 @csrf_protect
 @login_required(login_url=LOGIN_URL)
 def cancel_application(request, choice, user_id, activity_id):
-    if str(request.user.id) != user_id:
+    vol = Volunteer.objects.filter(user=user_id, status__gte='30')
+    if str(request.user.id) != user_id  or not vol:
         message = "不合法申请用户。"
     else:
-        vol = Volunteer.objects.get(user=user_id)
+        vol = vol[0]
         selected_activity = ActivityPublish.objects.filter(id=activity_id, status=1)
         if not selected_activity:
             message = "无法撤销该活动。"

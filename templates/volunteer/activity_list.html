@@ -2,8 +2,6 @@
 
 {% block title %}活动列表{% endblock %}
 
-{% block link %}{% endblock %}
-
 {% block body %}
 
     <h1>活动列表</h1>
@@ -17,7 +15,7 @@
             <li>{{ act.class_time }}</li>
             <li>{{ act.activity_type }}</li>
             <li>{{ act.status }}</li>
-            <li>{% if act.status == 1 %}
+            <li>{% if act.status == 1 and volunteer_status >= '30' %}
                 <div>
                     <a href="/activity/apply/first/{{ user.id }}/{{ act.id }}/">第一志愿申请</a>
                     <a href="/activity/cancel/first/{{ user.id }}/{{ act.id }}/">第一志愿撤销</a>

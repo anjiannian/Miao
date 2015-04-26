@@ -63,7 +63,21 @@ admin.site.register(User, SelfUserAdmin)
 
 # ==================================================================
 # =======================self admin=================================
+
+
 class VolunteersAdmin(CustomModelAdmin):
+
+    def sleep_volunteers(self, request, queryset):
+        update_count = 0
+        for vol in queryset:
+            if vol.status >= '30':
+                vol.status = '32'
+                vol.save()
+                update_count += 1
+        self.message_user(request, "%s 志愿者状态变更为休眠." % update_count)
+    sleep_volunteers.short_description = "休眠选中的志愿者"
+    actions = [sleep_volunteers]
+
     list_display = ["name", "nick_name", "phone_number", "created_at", "status"]
 
     def get_queryset(self, request):
