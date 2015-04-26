@@ -233,24 +233,26 @@ class Evaluation(BaseModelMixin):
 
 class ActivityPublish(models.Model):
     activity_name = models.CharField(u"名称", max_length=100)
+    effective_year = models.CharField(u"活动时间-年", max_length=4, choices=YEARS)
+    effective_season = models.CharField(u"活动时间-季度", max_length=1, choices=SEASON)
+    class_time = models.CharField(u"活动时间", max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(u"发布时间", null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(u"更新时间", null=True, blank=True, auto_now=True)
     group_leader = models.ForeignKey(Volunteer, verbose_name="组长", related_name="activity_group_leader")
     course = models.ForeignKey(Course, verbose_name="课程")
     class_id = models.ForeignKey(Class, verbose_name="班级")
-    class_time = models.CharField(u"上课时间", max_length=50, null=True, blank=True)
     activity_type = models.IntegerField(u"活动形式", default=0, choices=ACTIVITY_TYPE)
-    status = models.IntegerField(u"状态", default="0", choices=COURSE_STATUS)
+    status = models.IntegerField(u"状态", default=0, choices=COURSE_STATUS)
     apply_volunteers = models.ManyToManyField(
-        Volunteer, verbose_name=u"第一志愿", related_name="apply_volunteers", null=True, blank=True)
+        Volunteer, verbose_name=u"第一志愿", related_name="vol1", null=True, blank=True)
     apply_volunteers2 = models.ManyToManyField(
-        Volunteer, verbose_name=u"第二志愿", related_name="apply_volunteers2", null=True, blank=True)
+        Volunteer, verbose_name=u"第二志愿", related_name="vol2", null=True, blank=True)
     confirm_volunteers = models.ManyToManyField(
-        Volunteer, verbose_name=u"确认志愿者", related_name="confirm_volunteers", null=True, blank=True)
+        Volunteer, verbose_name=u"确认志愿者", related_name="con_vol", null=True, blank=True)
 
     class Meta:
-        verbose_name = u"活动"
-        verbose_name_plural = u"活动"
+        verbose_name = u"活动发布"
+        verbose_name_plural = u"活动发布"
         permissions = (
             ("view_only_activity_publish",  u"可以查看%s相关信息" % verbose_name),
         )
@@ -260,7 +262,6 @@ class ActivityPublish(models.Model):
 
 
 class ActivityDetail(models.Model):
-    #todo test activity
     activity = models.ForeignKey(ActivityPublish, verbose_name="活动主题")
     activity_time = models.DateTimeField(u"上课时间", null=True, blank=True)
     speaker = models.ForeignKey(Volunteer, verbose_name="主讲", related_name="speakser")

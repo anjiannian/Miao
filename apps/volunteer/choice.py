@@ -40,6 +40,7 @@ COURSE_STATUS = (
     (0, u"未开始"),
     (1, u"已发布"),
     (2, u"已实施"),
+    (3, u"结束"),
 )
 
 ACTIVITY_TYPE = (
